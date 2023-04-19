@@ -18,16 +18,6 @@ import matplotlib.pyplot as plt
 from io import BytesIO
 
 
-def municipio():
-    os.chdir("C:\DataScience\MODULO3\OpenData\Gasolineras")
-    municipios = pd.read_excel(
-        "listado-longitud-latitud-municipios-espana.xls", skiprows=2)
-    localidad = input("Dime tu municipio: ")
-    lat = municipios[municipios["Población"] == localidad]["Latitud"].iloc[0]
-    long = municipios[municipios["Población"] == localidad]["Longitud"].iloc[0]
-    return lat, long
-
-
 def pregunta_ubicacion():
     while True:
         calle = input("Ingrese el nombre de la calle: ")
@@ -46,6 +36,7 @@ lat_usuario, long_usuario = pregunta_ubicacion()
 
 
 def carga_playas():
+    # carga los datos
     url = "https://opendata.euskadi.eus/contenidos/ds_recursos_turisticos/playas_de_euskadi/opendata/espacios-naturales.geojson"
     json_data = requests.get(url).json()
     marca = []
@@ -76,6 +67,7 @@ espacios_naturales = carga_playas()
 
 
 def anade_distancia(espacios_naturales, lat_usuario, long_usuario):
+    # añade columna distancia en el dataframe
     espacios_naturales['distancia'] = espacios_naturales.apply(lambda row: geo_dist(
         row['latitud'], row['longitud'], lat_usuario, long_usuario), axis=1)
     return espacios_naturales
