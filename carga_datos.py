@@ -1,5 +1,6 @@
 
 import pandas as pd
+import os
 
 def cargador(ubicacion):
     if ubicacion[-4:] == ".csv":
@@ -14,4 +15,4 @@ def cargador(ubicacion):
     return datos
 
 if __name__ == "__main__":
-    datos = cargador("C:\DataScience\ProyecosGitHub\LimpiezaDatos-1\hormigon.csv")
+    datos = cargador("/home/laptop/Proyectos Python/LimpiezaDatos/laliga_22-23.csv")
