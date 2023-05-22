@@ -1,3 +1,4 @@
+
 import pandas as pd
 
 def cargador(ubicacion):
@@ -13,4 +14,4 @@ def cargador(ubicacion):
     return datos
 
 if __name__ == "__main__":
-    datos = cargador("/home/laptop/Proyectos Python/LimpiezaDatos/laliga_22-23.csv")
+    datos = cargador("C:\DataScience\ProyecosGitHub\LimpiezaDatos-1\hormigon.csv")
