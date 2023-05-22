@@ -16,7 +16,7 @@ def cargador(ubicacion):
     return datos
 
 def juntar_csvs(path, files):
-    df= pd.read_csv(files.pop())
+    df= pd.read_csv(os.path.join(path, files.pop()))
     for file in files:
         if file.endswith(".csv"):  # solo cargar archivos con extensión .csv
             path_file = os.path.join(path, file)
