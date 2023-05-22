@@ -1,7 +1,6 @@
 import pandas as pd
 from carga_datos import cargador
 
-
 def descripcion(datos :pd.DataFrame) -> pd.DataFrame:
   """
   Descripción estadística de los datos

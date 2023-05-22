@@ -1,6 +1,5 @@
 import pandas as pd
 
-
 def cargador(ubicacion):
     if ubicacion[-4:] == ".csv":
         separador = input("Separador utilizado [,]:")
