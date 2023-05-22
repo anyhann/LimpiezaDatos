@@ -16,6 +16,9 @@ def cargador(ubicacion):
 if __name__ == "__main__":
     datos = cargador("/home/laptop/Proyectos Python/LimpiezaDatos/laliga_22-23.csv")
     
+    
+    
+    
 # Cargar los conjuntos de datos y concatenarlos
 def juntar_csvs(path:str, files: list):
     for file in files:
