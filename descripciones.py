@@ -11,5 +11,5 @@ def descripcion(datos :pd.DataFrame) -> pd.DataFrame:
   return salida
 
 if __name__ == "__main__":
-  datos = cargador("/home/laptop/Proyectos Python/LimpiezaDatos/laliga_22-23.csv")
+  datos = cargador("C:\DataScience\ProyecosGitHub\LimpiezaDatos-1\hormigon.csv")
   print(descripcion(datos))
