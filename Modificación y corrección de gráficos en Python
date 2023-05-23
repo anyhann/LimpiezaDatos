@@ -1,0 +1,89 @@
+# 1- Modificación de títulos y etiquetas de los ejes :
+# Este código permite modificar los títulos y etiquetas de los ejes de un gráfico utilizando la biblioteca Matplotlib.
+
+import matplotlib.pyplot as plt
+
+# Datos
+x = [1, 2, 3, 4, 5]
+y = [10, 20, 15, 25, 30]
+
+# Crear el gráfico
+plt.plot(x, y)
+
+# Modificar el título y las etiquetas de los ejes
+plt.title("Título del gráfico")
+plt.xlabel("Eje de las abscisas")
+plt.ylabel("Eje de las ordenadas")
+
+# Mostrar el gráfico
+plt.show()
+
+
+# 2- Corrección de escalas de los ejes:
+# Este código permite corregir las escalas de los ejes de un gráfico utilizando las funciones set_xlim() y set_ylim() de Matplotlib.
+
+import matplotlib.pyplot as plt
+
+# Datos
+x = [1, 2, 3, 4, 5]
+y = [100, 1000, 10000, 100000, 1000000]
+
+# Crear el gráfico
+plt.plot(x, y)
+
+# Corregir las escalas de los ejes
+plt.xlim(0, 6)
+plt.ylim(0, 1200000)
+
+# Mostrar el gráfico
+plt.show()
+
+
+# 3- Modificación del estilo del gráfico:
+# Este código permite modificar el estilo de un gráfico utilizando las diferentes opciones de estilo de Matplotlib.
+
+import matplotlib.pyplot as plt
+
+# Datos
+x = [1, 2, 3, 4, 5]
+y = [10, 20, 15, 25, 30]
+
+# Crear el gráfico
+plt.plot(x, y)
+
+# Modificar el estilo del gráfico
+plt.style.use('seaborn-darkgrid')  # Cambiar el estilo
+plt.grid(True)  # Mostrar la cuadrícula
+plt.legend(['Curva 1'])  # Leyenda
+
+# Mostrar el gráfico
+plt.show()
+
+
+# 4- Adición de anotaciones:
+# Este código permite agregar anotaciones a un gráfico utilizando la función annotate() de Matplotlib.
+
+import matplotlib.pyplot as plt
+
+# Datos
+x = [1, 2, 3, 4, 5]
+y = [10, 20, 15, 25, 30]
+
+# Crear el gráfico
+plt.plot(x, y)
+
+# Agregar una anotación
+plt.annotate('Punto importante', xy=(3, 15), xytext=(4, 20),
+             arrowprops=dict(facecolor='black', arrowstyle='->'))
+
+# Mostrar el gráfico
+plt.show()
+
+
+# 5- Cambio de colores y estilos de línea:
+# Este te permite cambiar los colores y estilos de línea de un gráfico utilizando la función plot() de Matplotlib.
+# python.
+
+
+
+
