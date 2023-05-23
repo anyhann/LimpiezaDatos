@@ -5,24 +5,29 @@ from carga_datos import cargador
 import pandas as pd
 
 def plot_surface(dataframe, x_column, y_column, z_column):
+    # Crear figura y subplot
     fig = plt.figure()
     ax = fig.add_subplot(111, projection='3d')
 
     x = dataframe[x_column].values
     y = dataframe[y_column].values
-    X, Y = np.meshgrid(x, y)
+    z = dataframe[z_column].values
 
-    def z(x, y):
-        return dataframe[z_column].values
+    # Plot the 3D points
+    ax.scatter(x, y, z)
 
-    ax.contourf(X, Y, z(X, Y))
+    # Set labels for the axes
+    ax.set_xlabel('X')
+    ax.set_ylabel('Y')
+    ax.set_zlabel('Z')
     plt.show()
 
     # Ejemplo de uso
 if __name__ == "__main__":
     df = pd.DataFrame({'x': np.linspace(-4, 4, 50),
                         'y': np.linspace(-4, 4, 50),
-                        'z': np.sin(np.linspace(-4, 4, 50))})
+                        'z': np.linspace(-4, 4, 50)})
+    plot_surface(df, 'x', 'y', 'z')
 
 
 
