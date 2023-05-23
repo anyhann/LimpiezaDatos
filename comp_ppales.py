@@ -2,7 +2,7 @@ from carga_datos import cargador
 import pandas as pd
 from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import PCA
-
+from grafica3D_rotar import plot_surface
 datos = cargador("hormigon.csv")
 
 # Mostrar las columnas existentes
@@ -30,3 +30,4 @@ principal_components = pca.fit_transform(datos)
 # Crea un nuevo DataFrame con los componentes principales
 datos_principal = pd.DataFrame(data=principal_components, columns=["PC1", "PC2","PC3"])
 print(datos_principal)
+plot_surface(dataframe=datos_principal, x_column="PC1", y_column="PC2", z_column="PC3")
