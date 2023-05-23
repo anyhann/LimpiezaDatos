@@ -2,9 +2,14 @@
 import pandas as pd
 import os
 
+def obtener_separador():
+    separador = input("Separador utilizado [,]:")
+    if len(separador)==0:
+        separador = ","
+    return separador
 
 def cargador(ubicacion):
-    if ubicacion[-4:] == ".csv": # cargar archivo con extensión .csv
+    if ubicacion[-4:] == ".csv":
         separador = input("Separador utilizado [,]:")
         if len(separador)==0:
             separador = ","
@@ -16,15 +21,22 @@ def cargador(ubicacion):
     return datos
 
 def juntar_csvs(path, files):
-    df= pd.read_csv(os.path.join(path, files.pop()))
+    df = pd.DataFrame()
+    separador = obtener_separador()
+
     for file in files:
         if file.endswith(".csv"):  # solo cargar archivos con extensión .csv
             path_file = os.path.join(path, file)
-            data = pd.read_csv(path_file)
+            data = pd.read_csv(path_file, sep=separador)
             df = pd.concat([df, data])
-        return data
+
+    return df
 
 
 if __name__ == "__main__":
     main_file_path = os.path.abspath(__file__)
     datos = cargador(os.path.join(os.path.dirname(main_file_path), "hormigon.csv"))
+
+    listado_archivos = ["winequality-red.csv", "winequality-white.csv"] 
+    csv_unidos = juntar_csvs(os.path.dirname(main_file_path), listado_archivos)
+    print(csv_unidos)
