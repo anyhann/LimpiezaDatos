@@ -1,5 +1,6 @@
 import pandas as pd
 from carga_datos import cargador
+import os
 
 def descripcion(datos :pd.DataFrame) -> pd.DataFrame:
   """
@@ -11,5 +12,6 @@ def descripcion(datos :pd.DataFrame) -> pd.DataFrame:
   return salida
 
 if __name__ == "__main__":
-  datos = cargador("C:\DataScience\ProyecosGitHub\LimpiezaDatos-1\hormigon.csv")
+  main_file_path = os.path.abspath(__file__)
+  datos = cargador(os.path.join(os.path.dirname(main_file_path), "hormigon.csv"))
   print(descripcion(datos))
