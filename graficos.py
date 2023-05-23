@@ -10,5 +10,5 @@ def plot_correlation_heatmap(data):
     plt.show()
 
 # Ejemplo de uso
-data = ...  # Aquí debes proporcionar tus datos
+data = "C:\Users\David\Desktop\python_Limpieza Datos_guthub\LimpiezaDatos\hormigon.csv" # Aquí debes proporcionar tus datos
 plot_correlation_heatmap(data)
