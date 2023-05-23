@@ -4,7 +4,7 @@ import os
 
 
 def cargador(ubicacion):
-    if ubicacion[-4:] == ".csv":
+    if ubicacion[-4:] == ".csv": # cargar archivo con extensión .csv
         separador = input("Separador utilizado [,]:")
         if len(separador)==0:
             separador = ","
