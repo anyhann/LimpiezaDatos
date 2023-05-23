@@ -2,7 +2,7 @@ import pandas as pd
 from carga_datos import cargador
 import os
 
-def descripcion(datos :pd.DataFrame) -> pd.DataFrame:
+def descripcion(datos :pd.DataFrame) -> pd.DataFrame: # la salida es un DataFrame
   """
   Descripción estadística de los datos
   """
