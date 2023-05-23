@@ -3,7 +3,10 @@ import pandas as pd
 from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import PCA
 from grafica3D_rotar import plot_surface
-datos = cargador("hormigon.csv")
+
+import os
+main_file_path = os.path.abspath(__file__)
+datos = cargador(os.path.join(os.path.dirname(main_file_path), "hormigon.csv"))
 
 # Mostrar las columnas existentes
 print("Columnas disponibles:")
