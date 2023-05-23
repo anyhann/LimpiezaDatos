@@ -10,7 +10,10 @@ def obtener_separador():
 
 def cargador(ubicacion):
     if ubicacion[-4:] == ".csv":
-        datos = pd.read_csv(ubicacion, sep = obtener_separador())
+        separador = input("Separador utilizado [,]:")
+        if len(separador)==0:
+            separador = ","
+        datos = pd.read_csv(ubicacion, sep = separador)
     else:
         pd.read_excel(ubicacion)
     print("Cargado Dataframe de dimensiones", datos.shape)
