@@ -21,6 +21,6 @@ def leer_opciones_teclado():
 
 
   
-
-opcion_seleccionada = leer_opciones_teclado()
-print("La opción seleccionada fue:", opcion_seleccionada)
+if __name__ == "__main__":
+    opcion_seleccionada = leer_opciones_teclado()
+    print("La opción seleccionada fue:", opcion_seleccionada)
