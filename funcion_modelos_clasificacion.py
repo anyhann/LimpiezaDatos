@@ -2,7 +2,16 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
 from sklearn.tree import DecisionTreeClassifier
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.svm import SVC
 from sklearn.metrics import accuracy_score
+
+def evaluar_modelos(dataset, modelos, columna_objetivo):
+    """
+    Funcion que devuelve el accuracy de modelos de clasificación en un dataframe
+    Para hacer un modelo de clasificacion, previamente hay que pasar las variables predictoras a tipo numéricas para que se ejecute la función correctamente.
+    """
+
 
 from selecciona_columnas import selecciona_columnas_numericas
 
