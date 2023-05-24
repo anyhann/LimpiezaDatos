@@ -17,6 +17,10 @@ def selecciona_columnas(datos):
         salida = datos[datos.describe().columns]
         return salida
 
+def selecciona_columnas_numericas(datos):
+    salida = datos[datos.describe().columns]
+    return salida
+
 if __name__ == "__main__":
     main_file_path = os.path.abspath(__file__)
     datos = cargador(os.path.join(os.path.dirname(main_file_path), "hormigon.csv"))
