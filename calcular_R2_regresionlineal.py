@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 #esta funcion ignora todas las variables no-numéricas
 
 def calcular_R2_regresion(dataset, columna_objetivo):
-    #Ignoramos las variables numericas
+    #Ignoramos las variables no-numéricas
     dataset_num = dataset.select_dtypes(include=['number'])
     
     #Dividimos los datos 
