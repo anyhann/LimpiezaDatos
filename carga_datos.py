@@ -15,8 +15,8 @@ def cargador(ubicacion):
         datos = pd.read_csv(ubicacion, sep = obtener_separador())  
     else:
         pd.read_excel(ubicacion)
-    print("Cargado Dataframe de dimensiones", datos.shape)
     print(datos.head(10))
+    print("Cargado Dataframe de dimensiones", datos.shape)
     return datos
 
 def juntar_csvs(path, files):
@@ -36,6 +36,6 @@ if __name__ == "__main__":
     main_file_path = os.path.abspath(__file__)
     #datos = cargador(os.path.join(os.path.dirname(main_file_path), "hormigon.csv"))
     datos = cargador("https://raw.githubusercontent.com/JoaquinAmatRodrigo/skforecast/master/data/vic_elec.csv")
-    listado_archivos = ["winequality-red.csv", "winequality-white.csv"] 
-    csv_unidos = juntar_csvs(os.path.dirname(main_file_path), listado_archivos)
-    print(csv_unidos)
+    #listado_archivos = ["winequality-red.csv", "winequality-white.csv"] 
+    #csv_unidos = juntar_csvs(os.path.dirname(main_file_path), listado_archivos)
+    #print(csv_unidos)
