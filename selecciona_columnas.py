@@ -11,18 +11,27 @@ def pregunta_opcion():
     eleccion =  leer_opciones_teclado()
     return eleccion
 
+def selecciona_columnas_categoricas(datos):
+    # Obtener columnas de tipo object
+    salida = datos.filter(datos.select_dtypes(include=['object']), axis=1)
+    return salida
+
 def selecciona_columnas(datos):
     opcion = pregunta_opcion()
     if opcion == "1":
-        salida = datos[datos.describe().columns]
+        salida = selecciona_columnas_numericas(datos)
+        return salida
+    elif opcion == "3":
+        salida = selecciona_columnas_categoricas(datos)
         return salida
 
 def selecciona_columnas_numericas(datos):
     salida = datos[datos.describe().columns]
     return salida
 
+
 if __name__ == "__main__":
     main_file_path = os.path.abspath(__file__)
-    datos = cargador(os.path.join(os.path.dirname(main_file_path), "hormigon.csv"))
-    opcion = pregunta_opcion()
+    datos = cargador(os.path.join(os.path.dirname(main_file_path), "video_juegos_populares.csv"))
+    #opcion = pregunta_opcion()
     print(selecciona_columnas(datos))
