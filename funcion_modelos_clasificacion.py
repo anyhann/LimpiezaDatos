@@ -1,12 +1,3 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-Created on Wed May 24 10:00:54 2023
-
-@author: Denis
-"""
-
-
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
@@ -15,6 +6,7 @@ from sklearn.metrics import accuracy_score
 
 
 # Funcion que devuelve el accuracy de modelos de clasificación en un dataframe
+#Para hacer un modelo de clasificacion, previamente hay que pasar las variables predictoras a tipo numéricas para que se ejecute la función correctamente.
 
 def evaluar_modelos(dataset, modelos, columna_objetivo):
     # Dividir el conjunto de datos en características y variable objetivo
