@@ -38,5 +38,5 @@ def grafica_codo():
     ax.set_ylabel('Inercia')
     plt.show()
     
-grafica_codo()
+
 
