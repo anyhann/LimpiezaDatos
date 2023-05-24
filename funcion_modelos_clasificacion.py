@@ -6,14 +6,8 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.svm import SVC
 from sklearn.metrics import accuracy_score
 
-def evaluar_modelos(dataset, modelos, columna_objetivo):
-    """
-    Funcion que devuelve el accuracy de modelos de clasificación en un dataframe
-    Para hacer un modelo de clasificacion, previamente hay que pasar las variables predictoras a tipo numéricas para que se ejecute la función correctamente.
-    """
-
-
 from selecciona_columnas import selecciona_columnas_numericas
+
 
 def evaluar_modelos(dataset, modelos, columna_objetivo):
     """

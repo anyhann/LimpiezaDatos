@@ -3,32 +3,33 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import pandas as pd
 from carga_datos import obtener_separador, cargador
+from selecciona_columnas import selecciona_columnas_numericas
 from sklearn.preprocessing import StandardScaler
 
 
 
 
-#grafico para sacar el gráfico del codo para después utilizar modelos de clustering 
+#Grafico para sacar el gráfico del codo para después utilizar modelos de clustering 
 #Nos da a elegir datos normalizados o no-normalizados
 #Si hay datos contienen valores NANs hay que tratarlos previamente para que se ejecute la funcion correctamente.
 
 def grafica_codo():
     ubicacion = input("Ingrese la ubicación del archivo: ")
     dataset = cargador(ubicacion)
-    # Ignoramos las variables no-numéricas
-    dataset_num = dataset.select_dtypes(include=['number'])
+    # Selecciona variables numéricas
+    dataset= selecciona_columnas_numericas(dataset)
     
     normalizar = int(input("Normalizar datos (1: Sí / 2: No): "))
     if normalizar == 1:
         scaler = StandardScaler()
-        dataset_num= scaler.fit_transform(dataset_num)
+        dataset= scaler.fit_transform(dataset)
     else:
       pass
     
     clusters = []
 
     for i in range(1, 11):
-        km = KMeans(n_clusters=i).fit(dataset_num)
+        km = KMeans(n_clusters=i).fit(dataset)
         clusters.append(km.inertia_)
     #Graficamos el codo
     fig, ax = plt.subplots(figsize=(12, 8))
@@ -37,6 +38,5 @@ def grafica_codo():
     ax.set_xlabel('Clusters')
     ax.set_ylabel('Inercia')
     plt.show()
-    
 
 
