@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 
 #funcion para calcular el coeficiente de determinacion (R2) 
 #indica lo bien que se ajusta el modelo a los datos reales
+#esta funcion ignora todas las variables no-numéricas
 
 def calcular_R2_regresion(dataset, columna_objetivo):
     #Ignoramos las variables numericas
