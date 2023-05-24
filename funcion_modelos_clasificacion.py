@@ -4,12 +4,14 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.metrics import accuracy_score
 
+from selecciona_columnas import selecciona_columnas_numericas
 
 def evaluar_modelos(dataset, modelos, columna_objetivo):
     """
     Funcion que devuelve el accuracy de modelos de clasificación en un dataframe
     Para hacer un modelo de clasificacion, previamente hay que pasar las variables predictoras a tipo numéricas para que se ejecute la función correctamente.
     """
+    dataset= selecciona_columnas_numericas(dataset)
     # Dividir el conjunto de datos en características y variable objetivo
     X = dataset.drop(columna_objetivo, axis=1)
     y = dataset[columna_objetivo]
