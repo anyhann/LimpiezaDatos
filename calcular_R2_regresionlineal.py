@@ -8,7 +8,6 @@ import matplotlib.pyplot as plt
 #indica lo bien que se ajusta el modelo a los datos reales
 
 def calcular_R2_regresion(dataset, columna_objetivo):
-    
     #Ignoramos las variables numericas
     dataset_num = dataset.select_dtypes(include=['number'])
     
