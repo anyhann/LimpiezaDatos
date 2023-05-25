@@ -1,5 +1,6 @@
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.preprocessing import StandardScaler
+import pandas as pd
 
 
 def leer_opciones_teclado():
@@ -42,7 +43,8 @@ def normalizador(datos):
     else:
         print("Los datos no se han normalizado")
         return datos
-    normalized_data = scaler.fit_transform(datos)
+    normalized_data_array = scaler.fit_transform(datos)
+    normalized_data = pd.DataFrame(normalized_data_array, columns = datos.columns)
     return normalized_data
 
 if __name__ == "__main__":
