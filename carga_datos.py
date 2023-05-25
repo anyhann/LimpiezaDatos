@@ -9,6 +9,9 @@ def obtener_separador():
     return separador
 
 def cargador(ubicacion):
+    """
+    Cargador de datos
+    """
     if ubicacion[-4:] == ".csv":
         datos = pd.read_csv(ubicacion, sep = obtener_separador())
     elif ubicacion[:5]=="http":

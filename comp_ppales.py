@@ -22,7 +22,7 @@ def plot_rotable_pca(datos):
     pca = PCA(n_components=3) # Especifica el número de componentes principales que deseas obtener
     datos_limpios = eliminar_columnas(datos)
     print(datos_limpios)
-    # Aplica el PCA a los datos normalizados
+    # Aplica el PCA a los datos limpios
     principal_components = pca.fit_transform(datos_limpios)
     # Crea un nuevo DataFrame con los componentes principales
     datos_principal = pd.DataFrame(data=principal_components, columns=["PC1", "PC2","PC3"])
