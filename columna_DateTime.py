@@ -10,6 +10,7 @@ def pide_formato():
     - `%m`: Representa el número de mes con ceros iniciales (por ejemplo, 05 para mayo).
     - `%d`: Representa el número de día con ceros iniciales (por ejemplo, 03 para el tercer día del mes).
     - `%H`: Representa la hora en formato de 24 horas con ceros iniciales (por ejemplo, 09 para las 9:00).
+    - `%I`: Representa la hora en formato de 12 horas con ceros a la izquierda (por ejemplo, 09 para las 21:00)
     - `%M`: Representa los minutos con ceros iniciales (por ejemplo, 30 para los 30 minutos).
     - `%S`: Representa los segundos con ceros iniciales (por ejemplo, 45 para los 45 segundos).
     - `%f`: Representa los microsegundos (parte decimal de los segundos) con hasta 6 dígitos (por ejemplo, 123456 para 123.456 microsegundos).
