@@ -9,11 +9,13 @@ from sklearn.preprocessing import StandardScaler
 
 
 
-#Grafico para sacar el gráfico del codo para después utilizar modelos de clustering 
-#Nos da a elegir datos normalizados o no-normalizados
-#Si hay datos contienen valores NANs hay que tratarlos previamente para que se ejecute la funcion correctamente.
 
 def grafica_codo():
+    """
+    Grafico para sacar el gráfico del codo para después utilizar modelos de clustering 
+    Nos da a elegir datos normalizados o no-normalizados
+    Si hay datos contienen valores NANs hay que tratarlos previamente para que se ejecute la funcion correctamente.
+    """
     ubicacion = input("Ingrese la ubicación del archivo: ")
     dataset = cargador(ubicacion)
     # Selecciona variables numéricas
