@@ -44,3 +44,10 @@ def normalizador(datos):
         return datos
     normalized_data = scaler.fit_transform(datos)
     return normalized_data
+
+if __name__ == "__main__":
+    import os
+    from carga_datos import cargador
+    main_file_path = os.path.abspath(__file__)
+    datos = cargador(os.path.join(os.path.dirname(main_file_path), "datos", "hormigon.csv"))
+    print(normalizador(datos))
