@@ -10,6 +10,7 @@ def pide_formato():
     - `%m`: Representa el número de mes con ceros iniciales (por ejemplo, 05 para mayo).
     - `%d`: Representa el número de día con ceros iniciales (por ejemplo, 03 para el tercer día del mes).
     - `%H`: Representa la hora en formato de 24 horas con ceros iniciales (por ejemplo, 09 para las 9:00).
+    - `%I`: Representa la hora en formato de 12 horas con ceros a la izquierda (por ejemplo, 09 para las 21:00)
     - `%M`: Representa los minutos con ceros iniciales (por ejemplo, 30 para los 30 minutos).
     - `%S`: Representa los segundos con ceros iniciales (por ejemplo, 45 para los 45 segundos).
     - `%f`: Representa los microsegundos (parte decimal de los segundos) con hasta 6 dígitos (por ejemplo, 123456 para 123.456 microsegundos).
@@ -28,9 +29,10 @@ def pide_formato():
 
 
 def convertir_a_datetime(columna_texto):
+    """convierte una columna de texto en fechas utilizando el formato ingresado por el usuario"""
+    print(columna_texto.head(5))
     formato = pide_formato()
     print("El formato de fecha ingresado es:", formato)
-    """Convierte columnas de texto a fecha"""
     fechas_datetime = []
     for fecha_texto in columna_texto:
         try:
@@ -43,7 +45,7 @@ def convertir_a_datetime(columna_texto):
 
 if __name__ == "__main__":
     main_file_path = os.path.abspath(__file__)
-    datos = cargador(os.path.join(os.path.dirname(main_file_path), "vic_elec.csv"))
+    datos = cargador(os.path.join(os.path.dirname(main_file_path), "datos", "vic_elec.csv"))
 
     # Obtener la columna de texto y el formato de fecha del usuario
     columna_texto = input("Introduce el nombre de la columna de tiempo: ").split(",")
