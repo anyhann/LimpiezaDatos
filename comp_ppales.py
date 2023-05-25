@@ -4,7 +4,7 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import PCA
 from grafica3D_rotar import plot_surface
 import os
-
+from selecciona_columnas import selecciona_columnas_numericas
 
 
 def eliminar_columnas(datos):
@@ -19,8 +19,12 @@ def eliminar_columnas(datos):
     return datos
 
 def plot_rotable_pca(datos):
+    """
+    Reduce un dataset numérico a 3 componentes principales y lo grafica
+    """
     pca = PCA(n_components=3) # Especifica el número de componentes principales que deseas obtener
-    datos_limpios = eliminar_columnas(datos)
+    
+    datos_limpios = eliminar_columnas(selecciona_columnas_numericas(datos))
     print(datos_limpios)
     # Aplica el PCA a los datos limpios
     principal_components = pca.fit_transform(datos_limpios)
@@ -33,7 +37,6 @@ def plot_rotable_pca(datos):
 if __name__ == "__main__":
     main_file_path = os.path.abspath(__file__)
     datos = cargador(os.path.join(os.path.dirname(main_file_path), "hormigon.csv"))
-    
     plot_rotable_pca(datos)
 
     
