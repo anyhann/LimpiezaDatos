@@ -1,5 +1,6 @@
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.preprocessing import StandardScaler
+from sklearn.preprocessing import MaxAbsScaler
 import pandas as pd
 
 
@@ -32,7 +33,7 @@ def normalizador(datos):
     print("""Normalizadores disponibles:
     1. min-max scaler
     2. Standard scaler
-    3. No disponible
+    3. max- abs scaler
     q. Salir
     """)
     eleccion = leer_opciones_teclado()
@@ -40,6 +41,8 @@ def normalizador(datos):
         scaler = MinMaxScaler()
     elif eleccion == "2":
         scaler = StandardScaler()
+    elif eleccion == "3":
+        scaler = MaxAbsScaler()
     else:
         print("Los datos no se han normalizado")
         return datos
