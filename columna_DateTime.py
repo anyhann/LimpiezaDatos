@@ -28,9 +28,10 @@ def pide_formato():
 
 
 def convertir_a_datetime(columna_texto):
+    """convierte una columna de texto en fechas utilizando el formato ingresado por el usuario"""
+    print(columna_texto.head(5))
     formato = pide_formato()
     print("El formato de fecha ingresado es:", formato)
-    """Convierte columnas de texto a fecha"""
     fechas_datetime = []
     for fecha_texto in columna_texto:
         try:
@@ -43,7 +44,7 @@ def convertir_a_datetime(columna_texto):
 
 if __name__ == "__main__":
     main_file_path = os.path.abspath(__file__)
-    datos = cargador(os.path.join(os.path.dirname(main_file_path), "vic_elec.csv"))
+    datos = cargador(os.path.join(os.path.dirname(main_file_path), "datos", "vic_elec.csv"))
 
     # Obtener la columna de texto y el formato de fecha del usuario
     columna_texto = input("Introduce el nombre de la columna de tiempo: ").split(",")
