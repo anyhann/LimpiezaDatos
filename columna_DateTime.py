@@ -40,7 +40,7 @@ def convertir_a_datetime(columna_texto):
             fechas_datetime.append(fecha_datetime)
         except ValueError:
             fechas_datetime.append(None)  # Opcional: manejar valores no válidos como 'None'
-    print(fechas_datetime.head(5))
+    print(fechas_datetime[:5])
     return fechas_datetime
 
 
