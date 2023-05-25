@@ -3,14 +3,16 @@ import pandas as pd
 import os
 
 def obtener_separador():
-    separador = input("Separador utilizado [,]:")
+    separador = input("Separador utilizado [,]: ")
     if len(separador)==0:
         separador = ","
     return separador
 
-def cargador(ubicacion):
+def cargador(ubicacion: str) -> pd.DataFrame:
     """
     Cargador de datos
+    Admite ubicación de archivos csv con el path completo
+    o links de internet
     """
     if ubicacion[-4:] == ".csv":
         datos = pd.read_csv(ubicacion, sep = obtener_separador())
