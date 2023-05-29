@@ -5,9 +5,7 @@ import pandas as pd
 from carga_datos import obtener_separador, cargador
 from selecciona_columnas import selecciona_columnas_numericas
 from sklearn.preprocessing import StandardScaler
-
-
-
+from normalizador import normalizador
 
 
 def grafica_codo():
@@ -21,15 +19,11 @@ def grafica_codo():
     # Selecciona variables numéricas
     dataset= selecciona_columnas_numericas(dataset)
     
-    normalizar = int(input("Normalizar datos (1: Sí / 2: No): "))
-    if normalizar == 1:
-        scaler = StandardScaler()
-        dataset= scaler.fit_transform(dataset)
-    else:
-      pass
+    normalizar = int(input("Normalizar datos (S: Sí / N: No): "))
+    if normalizar.upper() == "S":
+        normalizador(dataset)
     
     clusters = []
-
     for i in range(1, 11):
         km = KMeans(n_clusters=i).fit(dataset)
         clusters.append(km.inertia_)
