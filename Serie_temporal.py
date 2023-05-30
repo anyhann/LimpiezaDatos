@@ -10,7 +10,7 @@ class SerieTemporal:
     def __init__(self, dataframe, columna_temporal, columna_valores):
         self.dataframe = self.conversion_a_serie_temp(dataframe, columna_temporal)
 
-    def conversion_a_serie_temp(dataframe, columna):
+    def conversion_a_serie_temp(self, dataframe, columna):
         # Convertir la columna de texto a datetime
         dataframe[columna] = convertir_a_datetime(dataframe[columna])
 
