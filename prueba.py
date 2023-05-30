@@ -7,12 +7,18 @@ datos = cargador(os.path.join(os.path.dirname(main_file_path), "datos", "vic_ele
 
 
 serie = SerieTemporal(datos, "Time", "Demand")
-print(serie.dataframe.index)
 
-indices_nan = serie.verifica_nan()
+hay_nans = serie.verifica_nan()
+print(serie.index)
+"""
+if hay_nans:
+    serie.completa_nans("media")
+"""
+
+serie.dataframe = serie.dataframe.drop(columns=['Unnamed: 0', "Date"])
 
 # Gráfico de autocorrelación
-serie.grafico_auto(120)
+#serie.grafico_auto(120)
 
 
 """

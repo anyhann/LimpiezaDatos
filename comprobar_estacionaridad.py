@@ -24,8 +24,8 @@ def comprobar_estacionaridad(columna_valor):
     df = df.rename(index={0: 'Dickey Fuller', 1: 'KPSS'}, inplace=True)
     print(df)
     if Valor_p1 <= 0.05:
-        print("Existe estacionaridad")
+        print("Es estacionaria")
     elif Valor_p2 <= 0.05:
-        print("No existe estacionaridad")
+        print("Es No estacionaria")
     return df
 
