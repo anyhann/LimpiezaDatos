@@ -2,7 +2,7 @@ from sklearn.preprocessing import MinMaxScaler
 from sklearn.preprocessing import StandardScaler
 from sklearn.preprocessing import MaxAbsScaler
 import pandas as pd
-
+from captura_opciones import leer_opciones_pantalla
 
 def leer_opciones_teclado():
     while True:
@@ -26,17 +26,17 @@ def leer_opciones_teclado():
             print("Opción inválida. Intente nuevamente.")
 
 
+
 def normalizador(datos):
     """
     Normaliza los datos preguntando por el algoritmo de normalización más conveniente
     """
-    print("""Normalizadores disponibles:
-    1. min-max scaler
-    2. Standard scaler
-    3. max- abs scaler
-    q. Salir
-    """)
-    eleccion = leer_opciones_teclado()
+    print("""Normalizadores disponibles:""")
+    opciones = {"1": "min-max scaler",
+        "2": "Standard scaler",
+        "3": "max- abs scaler",
+        "q": "Salir"}
+    eleccion = leer_opciones_pantalla(opciones)
     if eleccion == "1":
         scaler = MinMaxScaler()
     elif eleccion == "2":
@@ -49,6 +49,7 @@ def normalizador(datos):
     normalized_data_array = scaler.fit_transform(datos)
     normalized_data = pd.DataFrame(normalized_data_array, columns = datos.columns)
     return normalized_data
+
 
 if __name__ == "__main__":
     import os
