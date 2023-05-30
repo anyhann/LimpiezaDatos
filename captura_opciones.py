@@ -25,21 +25,20 @@ def leer_opciones_pantalla(opciones: dict) -> str:
     al usuario de elegir algo.
     Devuelve la clave elegida en formato string.
     """
+    claves = opciones.keys()
+    opciones_str = "\n".join(["Introduzca {}: {}".format(clave, opciones[clave]) for clave in claves])
     while True:
-        for clave in opciones.keys():
-            print("Introduzca ", clave, ": ", opciones[clave], sep="")
-        print("\n")
+        print(opciones_str + "\n")
         opcion = input("Ingrese una opción (o bien q para salir): ")
-        if opcion in opciones.keys():
+        if opcion in claves:
             print("Opción seleccionada:", opciones[opcion])
             return opcion
         elif opcion == "q":
             print("Adiós")
             break
         else:
-            print("Opción inválida. Intente nuevamente o pulse q para salir.")
-        
+            print("Opción inválida. Intente nuevamente o pulse q para salir.")     
   
 if __name__ == "__main__":
-    opcion_seleccionada = leer_opciones_pantalla({"1": "Haz esto", "2": "Haz lo otro", "3": "Haz lo de más allá"})
+    opcion_seleccionada = leer_opciones_pantalla({"1": "Haz esto", "2": "Haz lo otro", "3": "Haz lo de más allá", "q": "Salir"})
     print("La opción seleccionada fue:", opcion_seleccionada)
