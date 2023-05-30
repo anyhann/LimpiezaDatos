@@ -2,7 +2,7 @@
 from skforecast.ForecasterAutoreg import ForecasterAutoreg
 from sklearn.preprocessing import StandardScaler
 
-def crear_entrenar_ForecasterAutoreg(datos, tipo_regresor, num_lags,fin_validacion, columna_objetivo):
+def crear_entrenar_ForecasterAutoreg(self, datos, tipo_regresor, num_lags,fin_validacion, columna_objetivo):
     forecaster = ForecasterAutoreg()
     tipo_regresor= input("indique el tipo de regresor (R: Ridge/ L: Lasso)")
     if tipo_regresor== "R":

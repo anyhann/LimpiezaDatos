@@ -1,6 +1,7 @@
 import pandas as pd
 from statsmodels.graphics.tsaplots import plot_acf
 import matplotlib as plt
+from sklearn.preprocessing import StandardScaler
 from carga_datos import cargador
 
 
@@ -27,3 +28,16 @@ class SerieTemporal:
         fig, ax = plt.subplots(figsize=(7, 3))
         plot_acf(columna_valor, ax=ax, lags=num_lags)
         plt.show()
+    
+    def crear_entrenar_ForecasterAutoreg(self, dataframe, tipo_regresor, num_lags,fin_validacion, columna_valor):
+        forecaster = ForecasterAutoreg()
+        tipo_regresor= input("indique el tipo de regresor (R: Ridge/ L: Lasso)")
+        if tipo_regresor== "R":
+            from sklearn.linear_model import Ridge
+        if tipo_regresor== "L":
+            from sklearn.linear_model import Lasso
+        regressor     = tipo_regresor,
+        lags          = num_lags,
+        transformer_y = StandardScaler()
+        forecaster.fit(y=self.dataframe.loc[:fin_validacion, columna_valor])
+        forecaster
