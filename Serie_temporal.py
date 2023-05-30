@@ -1,29 +1,38 @@
 import pandas as pd
 from statsmodels.graphics.tsaplots import plot_acf
-import matplotlib as plt
-from carga_datos import cargador
-
+from matplotlib import pyplot as plt
+from carga_serie_temporal import auto_conversion_datetime
 
 
 class SerieTemporal:
-    def __init__(self, dataframe):
-        self.dataframe = dataframe
+    def __init__(self, dataframe, columna_temporal, columna_valores):
+        self.dataframe = self.conversion_a_serie_temp(dataframe, columna_temporal)
+        self.columna_valores = columna_valores
+        #self.conversion_a_serie_temp(dataframe, columna_temporal)
 
-    def transformar_a_serie_temporal(self, columna_fecha, columna_valor):
-        # Asegurarse de que la columna de fecha sea del tipo datetime
-        self.dataframe[columna_fecha] = pd.to_datetime(self.dataframe[columna_fecha])
+    def conversion_a_serie_temp(self, dataframe, columna):
+        # Convertir la columna de texto a datetime
+        dataframe[columna] = auto_conversion_datetime(dataframe[columna])
+        dataframe.set_index(columna, inplace=True)
+        dataframe = dataframe.asfreq(dataframe.index[1]-dataframe.index[0])
+        print("La frecuencia de la serie temporal es:", dataframe.index.freq)
+        dataframe = dataframe.sort_index()
+        return dataframe
 
-        # Establecer la columna de fecha como el índice del DataFrame
-        self.dataframe.set_index(columna_fecha, inplace=True)
-
-        # Ordenar el DataFrame por la columna de fecha en orden ascendente
-        self.dataframe.sort_index(inplace=True)
-
-        # Crear una serie temporal a partir de la columna de valores
-        serie_temporal = pd.Series(self.dataframe[columna_valor])
-
-        return serie_temporal
-    def grafico_autocorrelacion (self, columna_valor, num_lags):
+    def grafico_auto (self, num_lags):
         fig, ax = plt.subplots(figsize=(7, 3))
-        plot_acf(columna_valor, ax=ax, lags=num_lags)
+        plot_acf(self.dataframe[self.columna_valores], ax=ax, lags=num_lags)
         plt.show()
+    
+    def verifica_nan(self):
+        rango_completo = pd.date_range(
+        start = self.dataframe.index.min(),
+        end = self.dataframe.index.max(),
+        freq = self.dataframe.index.freq)
+        
+        verificacion = (self.dataframe.index == rango_completo).all()
+        if verificacion == True:
+            print("No hay valores nulos")
+        else:
+            print("Hay valores nulos")
+        return verificacion
