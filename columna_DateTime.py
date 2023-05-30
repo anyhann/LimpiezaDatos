@@ -1,6 +1,7 @@
 from datetime import datetime
 from carga_datos import cargador
 import os
+from dateutil.parser import parse
 
 def pide_formato():
     print("""
@@ -32,6 +33,8 @@ def convertir_a_datetime(columna_texto):
     """convierte una columna de texto en fechas utilizando el formato ingresado por el usuario"""
     print(columna_texto.head(5))
     formato = pide_formato()
+    if formato == "":
+        formato = "%Y-%m-%dT%H:%M:%SZ"
     print("El formato de fecha ingresado es:", formato)
     fechas_datetime = []
     for fecha_texto in columna_texto:
@@ -43,14 +46,25 @@ def convertir_a_datetime(columna_texto):
     print(fechas_datetime[:5])
     return fechas_datetime
 
+def auto_conversion_datetime(columna_texto):
+    """convierte una columna de texto en fechas utilizando el formato ingresado por el usuario"""
+    fechas_datetime = []
+    for fecha_texto in columna_texto:
+        try:
+            fecha_datetime = parse(fecha_texto)
+            fechas_datetime.append(fecha_datetime)
+        except ValueError:
+            fechas_datetime.append(None)  # Opcional: manejar valores no válidos como 'None'
+    print(fechas_datetime[:5])
+    return fechas_datetime
 
 if __name__ == "__main__":
     main_file_path = os.path.abspath(__file__)
     datos = cargador(os.path.join(os.path.dirname(main_file_path), "datos", "vic_elec.csv"))
 
     # Obtener la columna de texto y el formato de fecha del usuario
-    columna_texto = input("Introduce el nombre de la columna de tiempo: ").split(",")
+    columna_texto = input("Introduce el nombre de la columna de tiempo: ")
 
     # Convertir la columna de texto a datetime
-    columna_corregida = convertir_a_datetime(datos[columna_texto])
+    columna_corregida = auto_conversion_datetime(datos[columna_texto])
     print(columna_corregida)

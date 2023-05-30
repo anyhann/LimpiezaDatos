@@ -2,12 +2,12 @@
 Crear una funcion que coja una columna y la convierta en indice
 """
 from carga_datos import cargador
-from columna_DateTime import convertir_a_datetime
+from columna_DateTime import auto_conversion_datetime
 import os
 
 def conversion_a_serie_temp(dataframe, columna):
     # Convertir la columna de texto a datetime
-    dataframe[columna] = convertir_a_datetime(dataframe[columna])
+    dataframe[columna] = auto_conversion_datetime(dataframe[columna])
 
     dataframe.set_index(columna, inplace=True)
     return dataframe
