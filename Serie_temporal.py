@@ -24,3 +24,15 @@ class SerieTemporal:
         plot_acf(self.dataframe[self.columna_valores], ax=ax, lags=num_lags)
         plt.show()
     
+    def verifica_nan(self):
+        rango_completo = pd.date_range(
+        start = self.dataframe.index.min(),
+        end = self.dataframe.index.max(),
+        freq = self.dataframe.index.freq)
+        
+        verificacion = (self.dataframe.index == rango_completo).all()
+        if verificacion == True:
+            print("No hay valores nulos")
+        else:
+            print("Hay valores nulos")
+        return verificacion

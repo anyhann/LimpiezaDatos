@@ -9,13 +9,12 @@ def verifica_nan(dataframe):
     end = dataframe.index.max(),
     freq = dataframe.index.freq)
     
-    verificacion =(dataframe.index == rango_completo).all()
+    verificacion = (dataframe.index == rango_completo).all()
     if verificacion == True:
         print("No hay valores nulos")
     else:
         print("Hay valores nulos")
-    
-    return dataframe
+    return verificacion
 
 
 
