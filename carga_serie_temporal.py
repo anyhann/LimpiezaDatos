@@ -3,9 +3,7 @@ Crear una funcion que coja una columna y la convierta en indice
 """
 from carga_datos import cargador
 from columna_DateTime import convertir_a_datetime
-import pandas as pd
 import os
-from descripciones import descripcion
 
 def conversion_a_serie_temp(dataframe, columna):
     # Convertir la columna de texto a datetime
@@ -19,6 +17,5 @@ if __name__ == "__main__":
     main_file_path = os.path.abspath(__file__)
     datos = cargador(os.path.join(os.path.dirname(main_file_path), "datos", "vic_elec.csv"))
     datos = conversion_a_serie_temp(datos, "Time")
-    print(descripcion(datos))
     print(datos.index)
     formato = '%Y-%m-%dT%H:%M:%SZ'
