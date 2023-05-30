@@ -23,7 +23,7 @@ class SerieTemporal:
         serie_temporal = pd.Series(self.dataframe[columna_valor])
 
         return serie_temporal
-    def grafico_autocorrelacion (self, columna_valor, num_lags):
+    def grafico_auto (self, columna_valor, num_lags):
         fig, ax = plt.subplots(figsize=(7, 3))
         plot_acf(columna_valor, ax=ax, lags=num_lags)
         plt.show()
