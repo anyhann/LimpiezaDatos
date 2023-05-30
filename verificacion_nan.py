@@ -1,12 +1,27 @@
 import pandas as pd
-
+import os
+from carga_datos import cargador
+from carga_serie_temporal import conversion_a_serie_temp
 
 def verifica_nan(dataframe):
-# Construimos un rango completo de tiempo desde el mínimo al máximo y con saltos iguales a la frecuencia...
-rango_completo = pd.date_range(
-    start=dataframe.index.min(),
-    end=dataframe.index.max(),
-    freq=dataframe.index.freq)
+    rango_completo = pd.date_range(
+    start = dataframe.index.min(),
+    end = dataframe.index.max(),
+    freq = dataframe.index.freq)
+    
+    verificacion =(dataframe.index == rango_completo).all()
+    if verificacion == True:
+        print("No hay valores nulos")
+    else:
+        print("Hay valores nulos")
+    
+    return dataframe
 
-# ...y comprobamos que la columna índice (Time) coincide en todos los puntos
-(dataframe.index == rango_completo).all()
+
+
+if __name__ == "__main__":
+    main_file_path = os.path.abspath(__file__)
+    datos = cargador(os.path.join(os.path.dirname(main_file_path), "datos", "vic_elec.csv"))
+    datos = conversion_a_serie_temp(datos, "Time")
+    print(datos.index)
+    datos = verifica_nan(datos)
