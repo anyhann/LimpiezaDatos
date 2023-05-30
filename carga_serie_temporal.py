@@ -8,8 +8,10 @@ import os
 def conversion_a_serie_temp(dataframe, columna):
     # Convertir la columna de texto a datetime
     dataframe[columna] = auto_conversion_datetime(dataframe[columna])
-
     dataframe.set_index(columna, inplace=True)
+    datos = datos.asfreq(columna[1]-columna[0])
+    print("La frecuencia de la serie temporal es:", datos.index.freq)
+    dataframe = dataframe.sort_index()
     return dataframe
 
 

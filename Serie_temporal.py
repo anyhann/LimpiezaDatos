@@ -12,11 +12,13 @@ class SerieTemporal:
     def conversion_a_serie_temp(self, dataframe, columna):
         # Convertir la columna de texto a datetime
         dataframe[columna] = auto_conversion_datetime(dataframe[columna])
-
         dataframe.set_index(columna, inplace=True)
+        dataframe = dataframe.asfreq(dataframe.index[1]-dataframe.index[0])
+        print("La frecuencia de la serie temporal es:", dataframe.index.freq)
+        dataframe = dataframe.sort_index()
         return dataframe
 
-    
+
     def grafico_auto (self, columna_valor, num_lags):
         fig, ax = plt.subplots(figsize=(7, 3))
         plot_acf(columna_valor, ax=ax, lags=num_lags)
