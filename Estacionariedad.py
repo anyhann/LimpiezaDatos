@@ -5,7 +5,6 @@ from arch.unitroot import PhillipsPerron as pprtest
 from arch.unitroot import DFGLS
 
 def test_stationarity(data, column):
-    from statsmodels.tsa.stattools import adfuller, kpss, pprtest, DFGLS
     
     # Test de Dickey-Fuller augmenté (ADF)
     result = adfuller(data[column])
