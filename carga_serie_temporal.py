@@ -5,18 +5,20 @@ from carga_datos import cargador
 from columna_DateTime import convertir_a_datetime
 import pandas as pd
 import os
+from descripciones import descripcion
 
 def conversion_a_serie_temp(dataframe, columna):
-    # Obtener la columna de texto y el formato de fecha del usuario
-    columna_a_indice = input("Introduce el nombre de la columna de tiempo: ")
-
     # Convertir la columna de texto a datetime
-    columna_datetime = convertir_a_datetime(columna)
+    dataframe[columna] = convertir_a_datetime(dataframe[columna])
 
-    dataframe.set_index(columna_datetime, inplace=True)
+    dataframe.set_index(columna, inplace=True)
+    return dataframe
 
 
 if __name__ == "__main__":
     main_file_path = os.path.abspath(__file__)
     datos = cargador(os.path.join(os.path.dirname(main_file_path), "datos", "vic_elec.csv"))
-    conversion_a_serie_temp(datos, "Time")
+    datos = conversion_a_serie_temp(datos, "Time")
+    print(descripcion(datos))
+    print(datos.index)
+    formato = '%Y-%m-%dT%H:%M:%SZ'
