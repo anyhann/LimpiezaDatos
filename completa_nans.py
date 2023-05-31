@@ -4,11 +4,9 @@ import os
 import pandas as pd
 
 
-
 def detecta_nans(dataframe, columna):
     nulos = dataframe[columna].isnull()
     return nulos
-
 
 def rellena_aislados(dataframe, columna):
     """
@@ -16,10 +14,10 @@ def rellena_aislados(dataframe, columna):
     """
     filled_column = dataframe[columna].copy()
     # Si el primer valor es nulo, toma el segundo
-    if pd.isnull(filled_column[0]) and len(filled_column) > 1:
+    if pd.isnull(filled_column[0]):
         filled_column[0] = filled_column[1]
     # Si el último valor es nulo toma el penúltimo
-    if pd.isnull(filled_column[-1]) and len(filled_column) > 1:
+    if pd.isnull(filled_column[-1]):
         filled_column[-1] = filled_column[-2]
     # En los nulos intermedios hace la media
     for i in range(1, len(filled_column) - 1):
