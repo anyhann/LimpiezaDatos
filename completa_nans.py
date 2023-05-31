@@ -36,7 +36,8 @@ def rellena_consecutivos(sin_aislados, columna):
     """
     Arreglar el problema
     """
-    return sin_nans
+    sin_aislados[columna] = sin_nans
+    return sin_aislados
 
 def completa_nans(dataframe, columna):
     sin_aislados = rellena_aislados(dataframe, columna)
@@ -53,10 +54,10 @@ if __name__ == "__main__":
 
     serie = SerieTemporal(datos, "Time", "Demand")
     serie.dataframe = serie.dataframe.drop(columns=['Unnamed: 0', "Date"])
-    serie.dataframe[serie.columna_valores] = completa_nans(serie.dataframe, serie.columna_valores)
-    serie.dataframe["Temperature"] = completa_nans(serie.dataframe, "Temperature")
-    serie.dataframe["Holiday"] = completa_nans(serie.dataframe, "Holiday")
+    serie.dataframe = completa_nans(serie.dataframe, serie.columna_valores)
+    serie.dataframe = completa_nans(serie.dataframe, "Temperature")
+    serie.dataframe = completa_nans(serie.dataframe, "Holiday")
     print(serie.dataframe.head(7))
     serie.descripcion()
-    serie.grafico_auto(120)
+    #serie.grafico_auto(120)
 
