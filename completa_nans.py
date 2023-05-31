@@ -33,9 +33,7 @@ def rellena_aislados(dataframe, columna):
 
 def rellena_consecutivos(sin_aislados, columna):
     sin_nans = sin_aislados[columna].copy()
-    """
-    Arreglar el problema
-    """
+    df_interpolated = sin_nans.interpolate(method='spline')
     return sin_nans
 
 def completa_nans(dataframe, columna):
@@ -58,5 +56,4 @@ if __name__ == "__main__":
     serie.dataframe["Holiday"] = completa_nans(serie.dataframe, "Holiday")
     print(serie.dataframe.head(7))
     serie.descripcion()
-    serie.grafico_auto(120)
-
+    #serie.grafico_auto(120)
