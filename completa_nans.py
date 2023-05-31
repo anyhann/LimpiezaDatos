@@ -31,21 +31,7 @@ def rellena_aislados(dataframe, columna):
 
 def rellena_consecutivos(sin_aislados, columna):
     sin_nans = sin_aislados[columna].copy()
-<<<<<<< HEAD
-    df_interpolated = sin_nans.interpolate(method='spline')
-    return sin_nans
-=======
-
-    """
-    Arreglar el problema
-    """
-    sin_aislados[columna] = sin_nans
-    return sin_aislados
->>>>>>> 82edcff53f9c0df7db665e614bb7b9d7938b4a84
-    
-    """
-    Arreglar el problema
-    """
+    sin_nans = sin_nans.interpolate(method='linear') 
     sin_aislados[columna] = sin_nans
     return sin_aislados
 
@@ -66,11 +52,7 @@ if __name__ == "__main__":
     serie.dataframe = serie.dataframe.drop(columns=['Unnamed: 0', "Date"])
     serie.dataframe = completa_nans(serie.dataframe, serie.columna_valores)
     serie.dataframe = completa_nans(serie.dataframe, "Temperature")
-    serie.dataframe = completa_nans(serie.dataframe, "Holiday")
+    #serie.dataframe = completa_nans(serie.dataframe, "Holiday")
     print(serie.dataframe.head(7))
     serie.descripcion()
     #serie.grafico_auto(120)
-<<<<<<< HEAD
-=======
-
->>>>>>> 82edcff53f9c0df7db665e614bb7b9d7938b4a84
