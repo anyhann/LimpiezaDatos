@@ -49,13 +49,14 @@ def completa_nans(dataframe, columna):
 
 if __name__ == "__main__":
     main_file_path = os.path.abspath(__file__)
-    datos = cargador(os.path.join(os.path.dirname(main_file_path), "datos", "vic_elec.csv"))
+    datos = cargador(os.path.join(os.path.dirname(main_file_path), "datos", "vic_elec_nans.csv"))
 
     serie = SerieTemporal(datos, "Time", "Demand")
     serie.dataframe = serie.dataframe.drop(columns=['Unnamed: 0', "Date"])
-    serie.dataframe = completa_nans(serie.dataframe, serie.columna_valores)
-    serie.dataframe = completa_nans(serie.dataframe, "Temperature")
-    serie.dataframe = completa_nans(serie.dataframe, "Holiday")
+    serie.dataframe[serie.columna_valores] = completa_nans(serie.dataframe, serie.columna_valores)
+    serie.dataframe["Temperature"] = completa_nans(serie.dataframe, "Temperature")
+    serie.dataframe["Holiday"] = completa_nans(serie.dataframe, "Holiday")
     print(serie.dataframe.head(7))
     serie.descripcion()
+    serie.grafico_auto(120)
 
