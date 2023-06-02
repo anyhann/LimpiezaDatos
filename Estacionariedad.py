@@ -62,5 +62,5 @@ def test_stationarity(data, column):
             estacionaria = True
             nombre_test = "DFGLS"
 
-    mensaje = "La serie temporal {"" if estacionaria == True else "no" } es estacionaria según el test de {nombre_test} con valor p= {valor_p}"
+    mensaje = f"La serie temporal {'es' if estacionaria == True else 'no es'} estacionaria según el test de {nombre_test} con valor p= {result[1]}"
     return mensaje
