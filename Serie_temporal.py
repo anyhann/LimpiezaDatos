@@ -48,3 +48,39 @@ class SerieTemporal:
     def __getattr__(self, attr):
         # Redirigir el acceso a los atributos al atributo 'dataframe'
         return getattr(self.dataframe, attr)
+
+    def rellena_aislados(self, columna):
+        """
+        Rellena valores nulos aislados, es decir, que tengan valor no nulo antes y después
+        """
+        filled_column = self.dataframe[columna].copy()
+        # Si el primer valor es nulo, toma el segundo
+        if pd.isnull(filled_column[0]):
+            filled_column[0] = filled_column[1]
+        # Si el último valor es nulo toma el penúltimo
+        if pd.isnull(filled_column[-1]):
+            filled_column[-1] = filled_column[-2]
+        # En los nulos intermedios hace la media
+        for i in range(1, len(filled_column) - 1):
+            if pd.isnull(filled_column[i]):
+                upper_value = filled_column[i - 1]
+                lower_value = filled_column[i + 1]
+                if pd.notnull(upper_value) and pd.notnull(lower_value):
+                    filled_column[i] = (upper_value + lower_value) / 2
+        self.dataframe[columna] = filled_column
+        return self.dataframe
+    
+    def rellena_consecutivos(sin_aislados, columna):
+        sin_nans = sin_aislados[columna].copy()
+        sin_nans = sin_nans.interpolate(method='linear') 
+        sin_aislados[columna] = sin_nans
+        return sin_aislados
+
+    def completa_nans(self, columna):
+        sin_aislados = rellena_aislados(self.dataframe, columna)
+        if sin_aislados[columna].isnull().any():
+            print("Hay nulos consecutivos")
+            sin_nans = rellena_consecutivos(sin_aislados, columna)
+        else:
+            sin_nans = sin_aislados
+        return sin_nans
