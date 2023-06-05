@@ -77,6 +77,8 @@ class SerieTemporal:
         return sin_aislados
 
     def completa_nans(self, columna):
+        if self.dataframe[columna].dtype == bool:
+            nans_bool = self.__rellenar_nulos_bool(columna)
         sin_aislados = self.__rellena_aislados(columna)
         if sin_aislados[columna].isnull().any():
             print("Hay nulos consecutivos")

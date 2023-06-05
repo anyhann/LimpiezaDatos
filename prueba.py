@@ -31,10 +31,19 @@ serie.dataframe = serie.dataframe.drop(columns=['Unnamed: 0', "Date"])
 
 
 """
-"""
 serie = serie.rellenar_nan(indices_nan, metodo = "media")
 
 # Gráfica interactiva
+
+df = serie.dataframe
+data_columns = df.columns
+column_name = data_columns[0]
+data_sequence = df[column_name]
+layout_temp = go.Layout(title='Serie Temporal', xaxis=dict(title='Fecha'),
+                        yaxis=dict(title=column_name, color='royalblue', overlaying='y2')    )
+fig = go.Figure(data=data_sequence, layout=layout_temp)
+fig.show()
+
 # Está en visualización de datos
 serie.visualizacion_interactiva()
 
@@ -49,4 +58,3 @@ serie_diferenciada = serie.diferenciacion()
 # Modelos
 
 
-"""
