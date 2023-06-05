@@ -3,23 +3,18 @@ import os
 import pandas as pd
 import numpy as np
 
-class DataFrameTransformer:
-    #def __init__(self, df):
-         #self.df = df
+class DataFrameTransformer():
+    def __init__(self, dataframe):
+        self.df = dataframe
 
-    def __init__(self):
-            self.df = None
-
-    def cargar_dataframe(self, archivo):
-        self.df = pd.read_csv(archivo)
 
     def menu_tipo_encoding(self):
-        encoding_seleccionado = input("""¿Que tipo de encoding quieres aplicar?
-                    1. OneHotEncoding
-                    2. OrdinalEncoding
-                    3. Ambos
-                    4. Ninguno
-                    """)
+        encoding_seleccionado = input(
+            """¿Que tipo de encoding quieres aplicar?
+                1. OneHotEncoding
+                2. OrdinalEncoding
+                3. Ambos
+                4. Ninguno""")
         
         if encoding_seleccionado == "1":
             print("OneHotEncoding seleccionado")
@@ -168,3 +163,11 @@ class DataFrameTransformer:
         data_transformado = pd.concat([self.df, df_transformados], axis=1)
 
         return data_transformado
+    
+if __name__ == "__main__":
+    from carga_datos import cargador
+    main_file_path = os.path.abspath(__file__)
+    datos = cargador(os.path.join(os.path.dirname(main_file_path), "datos", "Corredores Latinos con Categorías.csv"))
+    transformador = DataFrameTransformer(datos)
+    opciones = transformador.elige_opcion()
+    print(opciones)
