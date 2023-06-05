@@ -3,30 +3,24 @@ import os
 import pandas as pd
 import numpy as np
 
-class DataFrameTransformer:
-    #def __init__(self, df):
-         #self.df = df
+class DataFrameTransformer():
+    def __init__(self, dataframe):
+        self.df = dataframe
 
-    def __init__(self):
-            self.df = None
-
-    def cargar_dataframe(self, archivo):
-        self.df = pd.read_csv(archivo)
 
     def menu_tipo_encoding(self):
-        encoding_seleccionado = input("""¿Que tipo de encoding quieres aplicar?
-                    1. OneHotEncoding
-                    2. OrdinalEncoding
-                    3. Ambos
-                    4. Ninguno
-                    """)
+        encoding_seleccionado = input(
+            """¿Que tipo de encoding quieres aplicar?
+                1. OneHotEncoding
+                2. OrdinalEncoding
+                3. Ambos
+                4. Ninguno
+                --->""")
         
         if encoding_seleccionado == "1":
             print("OneHotEncoding seleccionado")
         elif encoding_seleccionado == "2":
             print("OrdinalEncoding seleccionado")
-        elif encoding_seleccionado == "3":
-            print("Ambos seleccionado")
         else:
             print("Opcion no valida. Salir.")
 
@@ -53,7 +47,6 @@ class DataFrameTransformer:
         return dict_categoricas
 
     def elige_opcion(self):
-        print("esoy dentro")
          # Solicitar al usuario que elija un tipo de encoding por teclado
         encoding_seleccionado = self.menu_tipo_encoding()
 
@@ -80,11 +73,8 @@ class DataFrameTransformer:
             transformed_df = self.ordinal_encoder(nombres_cols_seleccionadas)
             print(transformed_df)
             return transformed_df
-            
-
-        elif (encoding_seleccionado == "3"):
+        else:
             return
-    
 
     def transform_dataframe(self):
         if self.df is None:
@@ -123,8 +113,7 @@ class DataFrameTransformer:
         return self.df
 
 
-    def crea_dummies(self):
-        print("entro al metodo")      
+    def crea_dummies(self): 
         # Obtener la lista de columnas del DataFrame
         columnas = self.df.columns.tolist()
         print(columnas)
@@ -175,3 +164,11 @@ class DataFrameTransformer:
         data_transformado = pd.concat([self.df, df_transformados], axis=1)
 
         return data_transformado
+    
+if __name__ == "__main__":
+    from carga_datos import cargador
+    main_file_path = os.path.abspath(__file__)
+    datos = cargador(os.path.join(os.path.dirname(main_file_path), "datos", "Corredores Latinos con Categorías.csv"))
+    transformador = DataFrameTransformer(datos)
+    opciones = transformador.elige_opcion()
+    print(opciones)
