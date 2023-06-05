@@ -77,10 +77,10 @@ class SerieTemporal:
         return sin_aislados
 
     def completa_nans(self, columna):
-        sin_aislados = rellena_aislados(self.dataframe, columna)
+        sin_aislados = self.rellena_aislados(self.dataframe, columna)
         if sin_aislados[columna].isnull().any():
             print("Hay nulos consecutivos")
-            sin_nans = rellena_consecutivos(sin_aislados, columna)
+            sin_nans = self.rellena_consecutivos(sin_aislados, columna)
         else:
             sin_nans = sin_aislados
         return sin_nans
