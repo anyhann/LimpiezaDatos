@@ -26,7 +26,7 @@ class SerieTemporal:
         print(f'Número de filas con missing values: {self.dataframe.isnull().any(axis=1).sum()}')
 
 
-    def grafico_auto (self, num_lags):
+    def grafico_auto(self, num_lags):
         fig, ax = plt.subplots(figsize=(7, 3))
         plot_acf(self.dataframe[self.columna_valores], ax=ax, lags=num_lags)
         plt.show()
@@ -49,7 +49,7 @@ class SerieTemporal:
         # Redirigir el acceso a los atributos al atributo 'dataframe'
         return getattr(self.dataframe, attr)
 
-    def rellena_aislados(self, columna):
+    def __rellena_aislados(self, columna):
         """
         Rellena valores nulos aislados, es decir, que tengan valor no nulo antes y después
         """
@@ -70,17 +70,19 @@ class SerieTemporal:
         self.dataframe[columna] = filled_column
         return self.dataframe
     
-    def rellena_consecutivos(sin_aislados, columna):
+    def __rellena_consecutivos(self, sin_aislados, columna):
         sin_nans = sin_aislados[columna].copy()
         sin_nans = sin_nans.interpolate(method='linear') 
         sin_aislados[columna] = sin_nans
         return sin_aislados
 
     def completa_nans(self, columna):
-        sin_aislados = self.rellena_aislados(self.dataframe, columna)
+        sin_aislados = self.__rellena_aislados(columna)
         if sin_aislados[columna].isnull().any():
             print("Hay nulos consecutivos")
-            sin_nans = self.rellena_consecutivos(sin_aislados, columna)
+            sin_nans = self.__rellena_consecutivos(sin_aislados, columna)
         else:
             sin_nans = sin_aislados
+        self.dataframe = sin_nans
         return sin_nans
+    
