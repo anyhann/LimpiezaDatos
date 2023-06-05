@@ -2,33 +2,13 @@ from sklearn.preprocessing import OrdinalEncoder
 import os
 import pandas as pd
 import numpy as np
+from captura_opciones import leer_opciones_pantalla
 
 class DataFrameTransformer():
     def __init__(self, dataframe):
         self.df = dataframe
 
-
-    def menu_tipo_encoding(self):
-        print ("\n")
-
-        encoding_seleccionado = input(
-        """¿Que tipo de encoding quieres aplicar?
-            1. OneHotEncoding
-            2. OrdinalEncoding\n""")
-        
-        if encoding_seleccionado == "1":
-            print("OneHotEncoding seleccionado")
-        elif encoding_seleccionado == "2":
-            print("OrdinalEncoding seleccionado")
-        else:
-            encoding_seleccionado = "q"
-            print("Opcion no valida. Salir.")
-
-        return encoding_seleccionado
-
-
     def mostrar_cols_categoricas(self):
-        # print(self.df.select_dtypes(include=["object"]).columns)
 
         porc_min_valores_unicos = 90
         tipos_no_categoricos = ["int64", "float64"]
@@ -57,9 +37,10 @@ class DataFrameTransformer():
         dict_categoricas =  self.mostrar_cols_categoricas()
 
          # Solicitar al usuario que elija un tipo de encoding por teclado
-        encoding_seleccionado = self.menu_tipo_encoding()
+        print ("\n¿Que tipo de encoding quieres aplicar")
+        opcion_seleccionada = leer_opciones_pantalla({"1": "OneHotEncoder", "2": "OrdinalEncoder", "q": "Salir"})
 
-        if encoding_seleccionado == "q":
+        if opcion_seleccionada == "q":
             return
 
         cols_seleccionadas = input("Introduce los índices de las columnas sobre las que quieres aplicar el encoding, separadas por coma: ")
@@ -69,20 +50,17 @@ class DataFrameTransformer():
         # pantalla empiezan en 1 por lo que tenemos que restar 1 al indice seleccionado para acceder a 
         # la columna correcta.
         indices_seleccionados = [int(index) - 1 for index in cols_seleccionadas.split(",")]
+
         columnas_seleccionadas_nombres = [self.df.columns[idx] for idx in indices_seleccionados]
         str_columnas_seleccionadas = ", ".join(columnas_seleccionadas_nombres)
         print(f"Se crearán los dummies para las columnas: {str_columnas_seleccionadas}")
 
-
-        # TODO: Verificar si todos los valores únicos están presentes en el orden jerárquico
-
-
-        if (encoding_seleccionado == "1"):
+        if (opcion_seleccionada == "1"):
             dummies_df = self.crea_dummies(columnas_seleccionadas_nombres)
             print(dummies_df.head())
             return dummies_df
 
-        elif (encoding_seleccionado == "2"):        
+        elif (opcion_seleccionada == "2"):        
             transformed_df = self.ordinal_encoder(columnas_seleccionadas_nombres)
             print(transformed_df)
             return transformed_df
