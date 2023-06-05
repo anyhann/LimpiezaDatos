@@ -14,7 +14,8 @@ class DataFrameTransformer():
                 1. OneHotEncoding
                 2. OrdinalEncoding
                 3. Ambos
-                4. Ninguno""")
+                4. Ninguno
+                --->""")
         
         if encoding_seleccionado == "1":
             print("OneHotEncoding seleccionado")
