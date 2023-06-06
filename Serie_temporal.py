@@ -31,6 +31,17 @@ class SerieTemporal:
         plot_acf(self.dataframe[self.columna_valores], ax=ax, lags=num_lags)
         plt.show()
     
+    def grafica_interactiva(self):
+        # Gráfica interactiva
+        df = self.dataframe
+        data_columns = df.columns
+        column_name = data_columns[0]
+        data_sequence = df[column_name]
+        layout_temp = go.Layout(title='Serie Temporal', xaxis=dict(title='Fecha'),
+                                yaxis=dict(title=column_name, color='royalblue', overlaying='y2')    )
+        fig = go.Figure(data=data_sequence, layout=layout_temp)
+        fig.show()
+    
     def verifica_nan(self):
         rango_completo = pd.date_range(
         start = self.dataframe.index.min(),
@@ -77,6 +88,8 @@ class SerieTemporal:
         return sin_aislados
 
     def completa_nans(self, columna):
+        if self.dataframe[columna].dtype == bool:
+            nans_bool = self.__rellenar_nulos_bool(columna)
         sin_aislados = self.__rellena_aislados(columna)
         if sin_aislados[columna].isnull().any():
             print("Hay nulos consecutivos")
