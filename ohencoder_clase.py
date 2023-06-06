@@ -25,8 +25,6 @@ class DataFrameTransformer:
             print("OneHotEncoding seleccionado")
         elif encoding_seleccionado == "2":
             print("OrdinalEncoding seleccionado")
-        elif encoding_seleccionado == "3":
-            print("Ambos seleccionado")
         else:
             print("Opcion no valida. Salir.")
 
@@ -53,7 +51,6 @@ class DataFrameTransformer:
         return dict_categoricas
 
     def elige_opcion(self):
-        print("esoy dentro")
          # Solicitar al usuario que elija un tipo de encoding por teclado
         encoding_seleccionado = self.menu_tipo_encoding()
 
@@ -80,11 +77,8 @@ class DataFrameTransformer:
             transformed_df = self.ordinal_encoder(nombres_cols_seleccionadas)
             print(transformed_df)
             return transformed_df
-            
-
-        elif (encoding_seleccionado == "3"):
+        else:
             return
-    
 
     def transform_dataframe(self):
         if self.df is None:
@@ -123,8 +117,7 @@ class DataFrameTransformer:
         return self.df
 
 
-    def crea_dummies(self):
-        print("entro al metodo")      
+    def crea_dummies(self): 
         # Obtener la lista de columnas del DataFrame
         columnas = self.df.columns.tolist()
         print(columnas)
