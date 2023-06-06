@@ -2,39 +2,17 @@ from sklearn.preprocessing import OrdinalEncoder
 import os
 import pandas as pd
 import numpy as np
+from captura_opciones import leer_opciones_pantalla
 
-class DataFrameTransformer:
-    #def __init__(self, df):
-         #self.df = df
-
-    def __init__(self):
-            self.df = None
-
-    def cargar_dataframe(self, archivo):
-        self.df = pd.read_csv(archivo)
-
-    def menu_tipo_encoding(self):
-        encoding_seleccionado = input("""¿Que tipo de encoding quieres aplicar?
-                    1. OneHotEncoding
-                    2. OrdinalEncoding
-                    3. Ambos
-                    4. Ninguno
-                    """)
-        
-        if encoding_seleccionado == "1":
-            print("OneHotEncoding seleccionado")
-        elif encoding_seleccionado == "2":
-            print("OrdinalEncoding seleccionado")
-        else:
-            print("Opcion no valida. Salir.")
-
-        return encoding_seleccionado
-
+class DataFrameTransformer():
+    def __init__(self, dataframe):
+        self.df = dataframe
 
     def mostrar_cols_categoricas(self):
-        print(self.df.select_dtypes(include=["object"]).columns)
+
         porc_min_valores_unicos = 90
         tipos_no_categoricos = ["int64", "float64"]
+
         # Presentar las columnas con un número asignado
         print("Variables categóricas del dataset: ")
         dict_categoricas = {}
@@ -43,38 +21,47 @@ class DataFrameTransformer:
             tipo = self.df[col].dtype
             if tipo not in tipos_no_categoricos:
                 numvals = self.df[col].nunique()
+                vals = self.df[col].unique()
                 porc = 100-(numvals/self.df.shape[0])*100
                 if (porc > porc_min_valores_unicos):
                     dict_categoricas[i] = col
-                    print(f"{i}. {col} [{tipo}] {col} ({numvals} valores únicos, {porc:.2f}%)")
+                    print(f"{i}. {col} [{tipo}] {col} ({numvals} valores únicos: {vals}, {porc:.2f}%)")
         
         return dict_categoricas
 
     def elige_opcion(self):
-         # Solicitar al usuario que elija un tipo de encoding por teclado
-        encoding_seleccionado = self.menu_tipo_encoding()
+        
+        print ("\n")
 
         # Mostrar las columnas categoricas
         dict_categoricas =  self.mostrar_cols_categoricas()
 
+         # Solicitar al usuario que elija un tipo de encoding por teclado
+        print ("\n¿Que tipo de encoding quieres aplicar")
+        opcion_seleccionada = leer_opciones_pantalla({"1": "OneHotEncoder", "2": "OrdinalEncoder", "q": "Salir"})
+
+        if opcion_seleccionada == "q":
+            return
+
         cols_seleccionadas = input("Introduce los índices de las columnas sobre las que quieres aplicar el encoding, separadas por coma: ")
-        #arr_cols_seleccionadas = [int(n) for n in cols_seleccionadas.split(",")]
+        
+        # Mostramos los nombres de las columnas seleccionadas por el usuario.
+        # Las columnas en el dataframe empiezan en 0 y los indices de las columnas que hemos mostrado por
+        # pantalla empiezan en 1 por lo que tenemos que restar 1 al indice seleccionado para acceder a 
+        # la columna correcta.
+        indices_seleccionados = [int(index) - 1 for index in cols_seleccionadas.split(",")]
 
-        # Obtener los nombres de las columnas seleccionadas
-        nombres_cols_seleccionadas = []
-        for i in cols_seleccionadas.split(","):
-            nombres_cols_seleccionadas.append(dict_categoricas[int(i)])
+        columnas_seleccionadas_nombres = [self.df.columns[idx] for idx in indices_seleccionados]
+        str_columnas_seleccionadas = ", ".join(columnas_seleccionadas_nombres)
+        print(f"Se crearán los dummies para las columnas: {str_columnas_seleccionadas}")
 
-        # TODO: Verificar si todos los valores únicos están presentes en el orden jerárquico
-
-
-        if (encoding_seleccionado == "1"):
-            dummies_df = self.crea_dummies()
-            print(dummies_df)
+        if (opcion_seleccionada == "1"):
+            dummies_df = self.crea_dummies(columnas_seleccionadas_nombres)
+            print(dummies_df.head())
             return dummies_df
 
-        elif (encoding_seleccionado == "2"):        
-            transformed_df = self.ordinal_encoder(nombres_cols_seleccionadas)
+        elif (opcion_seleccionada == "2"):        
+            transformed_df = self.ordinal_encoder(columnas_seleccionadas_nombres)
             print(transformed_df)
             return transformed_df
         else:
@@ -117,32 +104,23 @@ class DataFrameTransformer:
         return self.df
 
 
-    def crea_dummies(self): 
-        # Obtener la lista de columnas del DataFrame
-        columnas = self.df.columns.tolist()
-        print(columnas)
-        # Presentar las columnas con un número asignado
-        for i, col in enumerate(columnas, 1):
-            print(f"{i}. {col}")
-
-        # Pedir al usuario que elija las columnas por teclado
-        seleccion = input("Elige las columnas (separadas por comas): ")
-        indices_seleccionados = [int(index) - 1 for index in seleccion.split(",")]
-
-        # Obtener las columnas seleccionadas
-        columnas_seleccionadas = [columnas[idx] for idx in indices_seleccionados]
-
+    def crea_dummies(self, columnas_seleccionadas): 
+       
         for col in columnas_seleccionadas:
-                self.df = pd.concat([self.df, pd.get_dummies(self.df[col], prefix=col, prefix_sep='_')], axis=1)
-                self.df = self.df.drop(col, axis=1)
-                print(self.df)
-        return self.df
+            # Para cada columna seleccionada, aplicar OneHotEncoding
+            self.df = pd.concat([self.df, pd.get_dummies(self.df[col], prefix=col, prefix_sep='_')], axis=1)
+
+            #Borrar la columna original
+            self.df = self.df.drop(col, axis=1)
+
+        return transformador.df
+    
     
     def ordinal_encoder(self, nombres_cols_seleccionadas):
         # Mostrar los valores únicos de la columna seleccionada al usuario
-        print("Valores únicos de la columna seleccionada:")
         lista_categorias_todas_cols = []
         for i in nombres_cols_seleccionadas:
+            print(f"Valores únicos de la columna seleccionada {i}:")
             valores_columnas = self.df[i].unique()
             print(valores_columnas)
 
@@ -167,4 +145,16 @@ class DataFrameTransformer:
         # Concatenar el DataFrame transformado con el DataFrame original
         data_transformado = pd.concat([self.df, df_transformados], axis=1)
 
-        return data_transformado
+        # Borrar las columnas originales
+        for col in nombres_cols_seleccionadas:
+            data_transformado = data_transformado.drop(col, axis=1)
+
+        self.df = data_transformado
+        return transformador.df
+    
+if __name__ == "__main__":
+    from carga_datos import cargador
+    main_file_path = os.path.abspath(__file__)
+    datos = cargador(os.path.join(os.path.dirname(main_file_path), "datos", "Corredores Latinos con Categorías.csv"))
+    transformador = DataFrameTransformer(datos)
+    opciones = transformador.elige_opcion()
