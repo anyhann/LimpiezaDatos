@@ -5,7 +5,16 @@ from statsmodels.tsa.seasonal import seasonal_decompose
 from statsmodels.tsa.stattools import acf, pacf
 from statsmodels.tsa.arima.model import ARIMA
 
-# Obtén los datos de tu base de datos y guárdalos en un DataFrame de pandas llamado "df"
+""" Generar datos de series de tiempo con diferentes distribuciones de probabilidad
+np.random.seed(42)
+n = 1000
+data1 = np.random.normal(0, 1, n)
+data2 = np.random.uniform(-1, 1, n)
+data3 = np.random.exponential(1, n)
+
+Crear un DataFrame de pandas con los datos generados
+dates = pd.date_range(start='2020-01-01', periods=n, freq='D')
+df = pd.DataFrame({'Normal': data1, 'Uniforme': data2, 'Exponencial': data3}, index=dates) """
 
 # Visualizar las series de tiempo
 df.plot(subplots=True, figsize=(10, 6))
