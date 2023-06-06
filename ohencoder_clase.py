@@ -45,12 +45,17 @@ class DataFrameTransformer():
         # Mostrar las columnas categoricas
         dict_categoricas =  self.mostrar_cols_categoricas()
 
-         # Solicitar al usuario que elija un tipo de encoding por teclado
-        print ("\n¿Que tipo de encoding quieres aplicar")
+        # Solicitar al usuario que elija un tipo de encoding por teclado
+
+        print ("\n¿Que tipo de encoding quieres aplicar?")
         opcion_seleccionada = leer_opciones_pantalla({"1": "OneHotEncoder", "2": "OrdinalEncoder", "q": "Salir"})
 
         if opcion_seleccionada == "q":
             return
+        
+        # Mostrar las columnas categoricas
+        dict_categoricas =  self.mostrar_cols_categoricas()
+        print("\n")
 
         resultado_validar = False
         while resultado_validar == False:
@@ -121,6 +126,7 @@ class DataFrameTransformer():
                 # Verificar si todos los valores únicos están presentes en el orden jerárquico
                 if set(valores_columnas) != set(orden_valores):
                     print("Error: Algunos valores no coinciden con el orden jerárquico.")
+                    lista_categorias_todas_cols  = []
                 else:
                     datos_ok = True
 
