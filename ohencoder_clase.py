@@ -118,7 +118,6 @@ class DataFrameTransformer():
                 # Solicitar al usuario que elija el orden de los valores por orden jerárquico
                 print("Escribe los valores en el orden jerárquico deseado separados por comas:")
                 orden_valores = input().split(",")
-                lista_categorias_todas_cols.append(orden_valores)
 
                 # Eliminar espacios en blanco alrededor de los valores ingresados
                 orden_valores = [valor.strip() for valor in orden_valores]
@@ -129,6 +128,7 @@ class DataFrameTransformer():
                     lista_categorias_todas_cols  = []
                 else:
                     datos_ok = True
+                    lista_categorias_todas_cols.append(orden_valores)
 
         # Aplicar la transformación OrdinalEncoder a la lista de valores seleccionados
         encoder = OrdinalEncoder(categories=lista_categorias_todas_cols)
