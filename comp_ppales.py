@@ -2,7 +2,7 @@ from carga_datos import cargador
 import pandas as pd
 from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import PCA
-from grafica3D_rotar import plot_surface
+from LimpiezaDatos.graficos.grafica3D_rotar import plot_surface
 import os
 from selecciona_columnas import selecciona_columnas_numericas
 
