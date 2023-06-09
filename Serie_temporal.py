@@ -3,6 +3,7 @@ from statsmodels.graphics.tsaplots import plot_acf
 from matplotlib import pyplot as plt
 from carga_serie_temporal import auto_conversion_datetime
 from descripciones import descripcion
+import plotly.graph_objects as go
 
 class SerieTemporal:
     def __init__(self, dataframe, columna_temporal, columna_valores):
