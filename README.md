@@ -5,7 +5,9 @@ Incluye archivos en Python para la limpieza de datos
 - 'normalizador.py' requiere filtrar las columnas numéricas porque las de texto no se pueden normalizar
 - Normalizar la serie temporal. La columna de valores a predecir.
 - Agregar modelo ARIMA para predecir series temporales.
-- Introducir modelos de clasificación, regresión y clusterización
-- Ordenar las cosas en carpetas
 - Método estacionariedad para la serie temporal
     estacionaria = serie.estacionariedad()
+
+- Introducir modelos de clasificación, regresión y clusterización
+
+- Ordenar las cosas en carpetas
