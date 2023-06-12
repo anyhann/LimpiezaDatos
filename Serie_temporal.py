@@ -141,7 +141,7 @@ class SerieTemporal:
         self.dataframe = sin_nans
         return sin_nans
     
-    def rellenar_nulos_bool(self, columna):
+    def __rellenar_nulos_bool(self, columna):
         columna_sin_nans = self.dataframe[columna].tolist()
         for i in range(len(columna_sin_nans)):
             if columna_sin_nans[i] is None:
