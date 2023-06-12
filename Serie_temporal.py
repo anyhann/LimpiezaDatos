@@ -4,6 +4,10 @@ from matplotlib import pyplot as plt
 from carga_serie_temporal import auto_conversion_datetime
 from descripciones import descripcion
 import plotly.graph_objects as go
+from sklearn.preprocessing import MinMaxScaler
+from sklearn.preprocessing import StandardScaler
+from sklearn.preprocessing import MaxAbsScaler
+from captura_opciones import leer_opciones_pantalla
 
 class SerieTemporal:
     def __init__(self, dataframe, columna_temporal, columna_valores):
@@ -11,6 +15,35 @@ class SerieTemporal:
         self.columna_valores = columna_valores
         # Normalizar los datos numéricos
         # self.dataframe["Valores_norm"] = self.dataframe[self.columna_valores]
+        
+    def normalizador(self, dataframe):
+        """
+    Normaliza los datos preguntando por el algoritmo de normalización más conveniente
+    """
+    # Obtener solo las columnas numéricas
+        datos_num = dataframe.select_dtypes(include=['int64', 'float64'])
+        print(f"Las columnas que se van a normalizar son: {datos_num.columns}")
+        print("""Normalizadores disponibles:""")
+        opciones = {"1": "min-max scaler",
+        "2": "Standard scaler",
+        "3": "max- abs scaler",
+        "q": "Salir"}
+        eleccion = leer_opciones_pantalla(opciones)
+        if eleccion == "1":
+            scaler = MinMaxScaler()
+        elif eleccion == "2":
+            scaler = StandardScaler()
+        elif eleccion == "3":
+            scaler = MaxAbsScaler()
+        else:
+            print("Los datos no se han normalizado")
+        
+        normalized_data_array = scaler.fit_transform(datos_num)
+        normalized_data = pd.DataFrame(normalized_data_array, columns = datos_num.columns)
+    
+    #Actualizamos el dataframe original con los datos numericos normalizados
+        dataframe.update(normalized_data)
+        return dataframe 
 
     def conversion_a_serie_temp(self, dataframe, columna):
         # Convertir la columna de texto a datetime
