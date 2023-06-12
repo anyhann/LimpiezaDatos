@@ -11,7 +11,7 @@ def normalizador(datos):
     """
     
     # Obtener solo las columnas numéricas
-    datos = datos.select_dtypes(include=['int64', 'float64'])
+    datos_num = datos.select_dtypes(include=['int64', 'float64'])
     print(f"Las columnas que se van a normalizar son: {datos.columns}")
     print("""Normalizadores disponibles:""")
     opciones = {"1": "min-max scaler",
@@ -28,8 +28,11 @@ def normalizador(datos):
     else:
         print("Los datos no se han normalizado")
         return datos
-    normalized_data_array = scaler.fit_transform(datos)
-    normalized_data = pd.DataFrame(normalized_data_array, columns = datos.columns)
+    normalized_data_array = scaler.fit_transform(datos_num)
+    normalized_data = pd.DataFrame(normalized_data_array, columns = datos_num.columns)
+    
+    #Actualizamos el dataframe original con los datos numericos normalizados
+    datos.update(datos_num)
     return normalized_data
 
 
