@@ -116,4 +116,3 @@ class SerieTemporal:
                     columna_sin_nans[i] = columna_sin_nans[i-1]
         self.dataframe[columna] = columna_sin_nans
         return self.dataframe
-#
