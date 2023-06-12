@@ -6,6 +6,9 @@ from captura_opciones import leer_opciones_pantalla
 
 
 def normalizador(datos):
+    
+    # Obtener solo las columnas numéricas
+    datos = datos.select_dtypes(include=['int64', 'float64'])
     """
     Normaliza los datos preguntando por el algoritmo de normalización más conveniente
     """
@@ -27,6 +30,7 @@ def normalizador(datos):
     normalized_data_array = scaler.fit_transform(datos)
     normalized_data = pd.DataFrame(normalized_data_array, columns = datos.columns)
     return normalized_data
+
 
 
 if __name__ == "__main__":
