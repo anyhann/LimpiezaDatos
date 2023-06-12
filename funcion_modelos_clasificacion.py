@@ -24,14 +24,10 @@ def evaluar_modelos(dataset, modelos, columna_objetivo):
     
     # Iterar sobre los modelos
     for nombre_modelo, modelo in modelos.items():
-      
         X_train, X_train, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-        modelo.fit(X_train, y_train)
-    
-        y_pred = modelo.predict(X_train)
-        
+        modelo.fit(X_train, y_train)    
+        y_pred = modelo.predict(X_train)        
         precision = accuracy_score(y_train, y_pred)
-       
         resultado = {'Modelo': nombre_modelo, 'Precisión': precision}
         
         resultados.append(resultado)
