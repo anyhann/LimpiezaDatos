@@ -6,12 +6,13 @@ from captura_opciones import leer_opciones_pantalla
 
 
 def normalizador(datos):
-    
-    # Obtener solo las columnas numéricas
-    datos = datos.select_dtypes(include=['int64', 'float64'])
     """
     Normaliza los datos preguntando por el algoritmo de normalización más conveniente
     """
+    
+    # Obtener solo las columnas numéricas
+    datos = datos.select_dtypes(include=['int64', 'float64'])
+    print(f"Las columnas que se van a normalizar son: {datos.columns}")
     print("""Normalizadores disponibles:""")
     opciones = {"1": "min-max scaler",
         "2": "Standard scaler",
