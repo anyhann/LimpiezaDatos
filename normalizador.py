@@ -32,8 +32,8 @@ def normalizador(datos):
     normalized_data = pd.DataFrame(normalized_data_array, columns = datos_num.columns)
     
     #Actualizamos el dataframe original con los datos numericos normalizados
-    datos.update(datos_num)
-    return normalized_data
+    datos.update(normalized_data)
+    return datos
 
 
 
