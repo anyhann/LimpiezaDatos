@@ -35,7 +35,6 @@ def normalizador(datos):
     datos.update(normalized_data)
     return datos
 
-# test josu
 
 if __name__ == "__main__":
     import os
