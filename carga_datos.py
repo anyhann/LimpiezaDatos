@@ -39,7 +39,7 @@ def juntar_csvs(path, files):
 
 if __name__ == "__main__":
     main_file_path = os.path.abspath(__file__)
-    #datos = cargador(os.path.join(os.path.dirname(main_file_path), "hormigon.csv"))
+    datos = cargador(os.path.join(os.path.dirname(main_file_path), "datos", "hormigon.csv"))
     datos = cargador("https://raw.githubusercontent.com/JoaquinAmatRodrigo/skforecast/master/data/vic_elec.csv")
     #listado_archivos = ["winequality-red.csv", "winequality-white.csv"] 
     #csv_unidos = juntar_csvs(os.path.dirname(main_file_path), listado_archivos)
