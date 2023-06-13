@@ -77,10 +77,7 @@ class SerieTemporal:
         data_sequence = df[column_name]
         layout_temp = go.Layout(title='Serie Temporal', xaxis=dict(title='Fecha'),
                                 yaxis=dict(title=column_name, 
-                                    color='royalblue', 
-                                    overlaying='y2'
-                                    )
-                                )
+                                    color='royalblue'))
         fig = go.Figure(data=data_sequence, layout=layout_temp)
         fig.show()
     
