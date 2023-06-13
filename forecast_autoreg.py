@@ -21,7 +21,7 @@ def crear_entrenar_ForecasterAutoreg(datos, num_lags, fin_validacion, columna_ob
         lags          = num_lags,
         transformer_y = StandardScaler())
     forecaster.fit(y=datos.loc[:fin_validacion, columna_objetivo])
-    forecaster
+    return forecaster
 
 if __name__ == "__main__":
     from Serie_temporal import SerieTemporal
