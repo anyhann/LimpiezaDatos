@@ -44,10 +44,11 @@ class SerieTemporal:
         
         normalized_data_array = scaler.fit_transform(datos_num)
         normalized_data = pd.DataFrame(normalized_data_array, columns = datos_num.columns)
-        print(normalized_data)
+        
         #Actualizamos el dataframe original con los datos numericos normalizados
-        dataframe.update(normalized_data)
-        print(dataframe)
+        for columna in normalized_data.columns:
+            dataframe[columna] = normalized_data[columna].tolist() 
+
         # Actualizamos el objeto serie
         self.dataframe = dataframe
         return dataframe 

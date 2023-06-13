@@ -74,7 +74,7 @@ class DataFrameTransformer():
 
             if (not resultado_validar):
                 print("Error: Algunos valores no coinciden con los índices de las columnas disponibles.")
-       
+        
 
         columnas_seleccionadas_nombres = [self.df.columns[idx] for idx in indices_seleccionados]
         str_columnas_seleccionadas = ", ".join(columnas_seleccionadas_nombres)
@@ -94,7 +94,7 @@ class DataFrameTransformer():
 
 
     def crea_dummies(self, columnas_seleccionadas): 
-       
+        
         for col in columnas_seleccionadas:
             # Para cada columna seleccionada, aplicar OneHotEncoding
             self.df = pd.concat([self.df, pd.get_dummies(self.df[col], prefix=col, prefix_sep='_')], axis=1)
