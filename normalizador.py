@@ -12,7 +12,7 @@ def normalizador(datos):
     
     # Obtener solo las columnas numéricas
     datos_num = datos.select_dtypes(include=['int64', 'float64'])
-    print(f"Las columnas que se van a normalizar son: {datos.columns}")
+    print(f"Las columnas que se van a normalizar son: {list(datos_num.columns)}")
     print("""Normalizadores disponibles:""")
     opciones = {"1": "min-max scaler",
         "2": "Standard scaler",
