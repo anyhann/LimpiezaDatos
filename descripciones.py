@@ -13,5 +13,5 @@ def descripcion(datos :pd.DataFrame) -> pd.DataFrame: # la salida es un DataFram
 
 if __name__ == "__main__":
   main_file_path = os.path.abspath(__file__)
-  datos = cargador(os.path.join(os.path.dirname(main_file_path), "hormigon.csv"))
-  print(descripcion(datos))
+  datos = cargador(os.path.join(os.path.dirname(main_file_path), "datos", "hormigon.csv"))
+  print(descripcion(datos).columns)
