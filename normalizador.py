@@ -9,7 +9,6 @@ def normalizador(datos):
     """
     Normaliza los datos preguntando por el algoritmo de normalización más conveniente
     """
-    
     # Obtener solo las columnas numéricas
     datos_num = datos.select_dtypes(include=['int64', 'float64'])
     print(f"Las columnas que se van a normalizar son: {list(datos_num.columns)}")

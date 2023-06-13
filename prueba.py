@@ -11,14 +11,15 @@ datos.drop("Unnamed: 0", axis=1, inplace= True)
 serie = SerieTemporal(datos, "Time", "Demand")
 
 serie.descripcion()
-
+"""
 serie.completa_nans("Demand")
 serie.completa_nans("Temperature")
 serie.completa_nans("Holiday")
-
+"""
 serie.descripcion()
-
-serie.grafica_interactiva()
+serie.normalizador()
+serie.descripcion()
+#serie.grafica_interactiva()
 
 input("")
 """

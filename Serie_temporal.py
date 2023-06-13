@@ -19,11 +19,12 @@ class SerieTemporal:
         # Normalizar los datos numéricos
         # self.dataframe["Valores_norm"] = self.dataframe[self.columna_valores]
         
-    def normalizador(self, dataframe):
+    def normalizador(self):
         """
-    Normaliza los datos preguntando por el algoritmo de normalización más conveniente
-    """
-    # Obtener solo las columnas numéricas
+        Normaliza los datos preguntando por el algoritmo de normalización más conveniente
+        """
+        dataframe = self.dataframe
+        # Obtener solo las columnas numéricas
         datos_num = dataframe.select_dtypes(include=['int64', 'float64'])
         print(f"Las columnas que se van a normalizar son: {datos_num.columns}")
         print("""Normalizadores disponibles:""")
@@ -43,9 +44,12 @@ class SerieTemporal:
         
         normalized_data_array = scaler.fit_transform(datos_num)
         normalized_data = pd.DataFrame(normalized_data_array, columns = datos_num.columns)
-    
-    #Actualizamos el dataframe original con los datos numericos normalizados
+        print(normalized_data)
+        #Actualizamos el dataframe original con los datos numericos normalizados
         dataframe.update(normalized_data)
+        print(dataframe)
+        # Actualizamos el objeto serie
+        self.dataframe = dataframe
         return dataframe 
 
     def conversion_a_serie_temp(self, dataframe, columna):
