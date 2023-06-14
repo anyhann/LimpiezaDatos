@@ -61,7 +61,25 @@ class Clasificador:
         self.dataframe = dataframe
         self.columna_clase = columna_clase
 
-
+    def separa_train(self, porcentaje=20):
+        dataframe= self.dataframe
+        columna_clase = self.columna_clase
+        if porcentaje == 20:
+            porcentaje = input("¿Qué porcentaje de las muestras deseas para el test? (por defecto 20):")
+        if porcentaje == "":
+            porcentaje = 20
+        corte = int(int(porcentaje)*dataframe.shape[0]/100)
+        train_data = dataframe[:-corte]
+        test_data = dataframe[corte:]
+        train_X = train_data.drop([columna_clase], axis=1)
+        train_y = train_data[columna_clase]
+        test_X = test_data.drop([columna_clase], axis=1)
+        test_y = test_data[columna_clase]
+        self.train_X=train_X
+        self.train_y=train_y
+        self.test_X=test_X
+        self.test_y=test_y
+        return train_X, train_y, test_X, test_y
 
 
 

@@ -4,10 +4,10 @@ from sklearn.preprocessing import StandardScaler
 
 def crear_entrenar_ForecasterAutoreg(datos, num_lags, fin_validacion, columna_objetivo):
     """
+    data y columna_objetivo deben venir del self
     Crea y entrena un forecaster.
     num_lags
     fin_validacion
-    columna_objetivo
     """
     tipo_regresor= input("indique el tipo de regresor (R: Ridge/ L: Lasso)")
     if tipo_regresor== "R":
