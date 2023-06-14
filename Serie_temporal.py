@@ -1,5 +1,5 @@
 import pandas as pd
-from statsmodels.graphics.tsaplots import plot_acf
+from statsmodels.tsa.stattools import acf, pacf
 from matplotlib import pyplot as plt
 from carga_serie_temporal import auto_conversion_datetime
 from descripciones import descripcion
@@ -69,10 +69,26 @@ class SerieTemporal:
         print(f'Número de filas con missing values: {self.dataframe.isnull().any(axis=1).sum()}')
 
 
-    def grafico_auto(self, num_lags):
-        fig, ax = plt.subplots(figsize=(7, 3))
-        plot_acf(self.dataframe[self.columna_valores], ax=ax, lags=num_lags)
-        plt.show()
+    def autocor_graficos(self, num_lags):
+        """
+        Analizar las autocorrelaciones y autocorrelaciones parciales
+        Muestra los gráficos
+        """
+        dataframe = self.dataframe
+        columna = self.columna_valores
+        for columna in dataframe.columns:
+            print(f"ACF y PACF para {columna}:")
+            lag_acf = acf(dataframe[columna], nlags=num_lags)
+            lag_pacf = pacf(dataframe[columna], nlags=num_lags)
+
+            plt.subplot(121)
+            plt.stem(lag_acf)
+            plt.title('Función de Autocorrelación')
+
+            plt.subplot(122)
+            plt.stem(lag_pacf)
+            plt.title('Función de Autocorrelación Parcial')
+            plt.show()
     
     def grafica_interactiva(self):
         # Gráfica interactiva
