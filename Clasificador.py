@@ -1,5 +1,3 @@
-import numpy as np
-import pandas as pd
 import os
 from carga_datos import cargador
 from descripciones import descripcion
@@ -7,6 +5,9 @@ from descripciones import descripcion
 
 
 def cuenta_en_cols(dataframe):
+    """
+    Cuenta los valores únicos de cada columna
+    """
     columnas = dataframe.columns
     for columna in columnas:
         cuenta_valores_unicos = dataframe[columna].value_counts()
