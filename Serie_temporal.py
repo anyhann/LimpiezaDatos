@@ -14,7 +14,7 @@ from arch.unitroot import DFGLS
 from statsmodels.tsa.seasonal import seasonal_decompose
 from statsmodels.tsa.stattools import acf, pacf
 from statsmodels.tsa.arima.model import ARIMA
-
+import numpy as np
 class SerieTemporal:
     def __init__(self, dataframe, columna_temporal, columna_valores):
         self.dataframe = self.conversion_a_serie_temp(dataframe, columna_temporal)
@@ -297,7 +297,14 @@ class SerieTemporal:
         return mensaje
     
         # Separación datos train-val-test
-    def separacion_datos (dataframe, fin_train, fin_validacion):
+
+
+    def separacion_datos(self, fin_train, fin_validacion):
+        """
+        Función para realizar la separación entre los conjuntos de entrenamiento y validación
+        """
+        dataframe = self.dataframe
+        print(f"Fecha inicio datos {dataframe.index.min()}, y final {dataframe.index.max()}")
         dataframe_train = dataframe.loc[: fin_train, :]
         dataframe_val   = dataframe.loc[fin_train:fin_validacion, :]
         dataframe_test  = dataframe.loc[fin_validacion:, :]
@@ -323,3 +330,32 @@ class SerieTemporal:
             plt.plot(resultado.fittedvalues, color='red')
             plt.title(f"Modelo ARIMA para {columna}")
             plt.show()
+
+    def __preguntas_red_neuronal(self):
+        self.num_dias_pred = int(input("Ingrese el número de días de predicción: "))
+        self.time_step = int(input("Ingrese el número de días históricos para la predicción: "))
+        
+
+    def generar_datos_entrenamiento(self):
+        self.__preguntas_red_neuronal()
+        columna = self.dataframe[self.columna_valores].tolist()
+        self.X_train_long_term = []
+        self.Y_train_long_term = []
+        num_dias_pred = self.num_dias_pred
+        time_step = self.time_step
+        for j in range(0, num_dias_pred):
+            X_train = []
+            Y_train = []
+            for i in range(0, len(columna) - num_dias_pred - time_step):
+                X_train.append(columna[i:i+time_step])
+                indice = i + time_step + j
+                Y_train.append(columna[indice:indice+1][0])
+            self.X_train_long_term.append(X_train)
+            self.Y_train_long_term.append(Y_train)
+            
+        X_train, Y_train = np.array(self.X_train_long_term), np.array(self.Y_train_long_term)
+        print(f"Dimensiones de X_train: {X_train.shape[1]} muestras, {X_train.shape[2]} características, {X_train.shape[0]} días de predicción")
+        print(f"Dimensiones de Y_train: {Y_train.shape[1]} muestras, {Y_train.shape[0]} días de predicción")
+
+            
+        return X_train, Y_train
