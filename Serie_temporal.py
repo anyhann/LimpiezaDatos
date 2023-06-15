@@ -14,7 +14,7 @@ from arch.unitroot import DFGLS
 from statsmodels.tsa.seasonal import seasonal_decompose
 from statsmodels.tsa.stattools import acf, pacf
 from statsmodels.tsa.arima.model import ARIMA
-
+import numpy as np
 class SerieTemporal:
     def __init__(self, dataframe, columna_temporal, columna_valores):
         self.dataframe = self.conversion_a_serie_temp(dataframe, columna_temporal)
@@ -297,7 +297,14 @@ class SerieTemporal:
         return mensaje
     
         # Separación datos train-val-test
-    def separacion_datos (dataframe, fin_train, fin_validacion):
+
+
+    def separacion_datos(self, fin_train, fin_validacion):
+        """
+        Función para realizar la separación entre los conjuntos de entrenamiento y validación
+        """
+        dataframe = self.dataframe
+        print(f"Fecha inicio datos {dataframe.index.min()}, y final {dataframe.index.max()}")
         dataframe_train = dataframe.loc[: fin_train, :]
         dataframe_val   = dataframe.loc[fin_train:fin_validacion, :]
         dataframe_test  = dataframe.loc[fin_validacion:, :]
