@@ -1,6 +1,15 @@
 # LimpiezaDatos
 Incluye archivos en Python para la limpieza de datos
 
+## Tareas realizadas
+
+### Serie Temporal
+    - Creación de la clase con su iniciador (convertir en serie temporal) private
+    - Normalizar las columnas numéricas eligiendo el normalizador.
+    - Interpolación de los valores perdidos 
+
+
+
 ## Mejoras pendientes
 - Agregar modelo ARIMA para predecir series temporales.
 - Crear método que diferencie la serie temporal.
