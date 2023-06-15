@@ -38,7 +38,6 @@ def leer_opciones_pantalla(opciones: dict) -> str:
             break
         else:
             print("Opción inválida. Intente nuevamente o pulse q para salir.")     
-  
 if __name__ == "__main__":
     opcion_seleccionada = leer_opciones_pantalla({"1": "Haz esto", "2": "Haz lo otro", "3": "Haz lo de más allá", "q": "Salir"})
     print("La opción seleccionada fue:", opcion_seleccionada)
