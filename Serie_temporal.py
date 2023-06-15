@@ -1,34 +1,89 @@
+# Importaciones básicas
 import pandas as pd
-from statsmodels.tsa.stattools import acf, pacf
+import numpy as np
 from matplotlib import pyplot as plt
-from carga_serie_temporal import auto_conversion_datetime
-from descripciones import descripcion
-import plotly.graph_objects as go
-from sklearn.preprocessing import MinMaxScaler
-from sklearn.preprocessing import StandardScaler
-from sklearn.preprocessing import MaxAbsScaler
-from captura_opciones import leer_opciones_pantalla
-from statsmodels.tsa.stattools import adfuller, kpss
+
+from sklearn.preprocessing import MinMaxScaler, StandardScaler, MaxAbsScaler
+
+# Importaciones para Series Temporales
+from statsmodels.tsa.seasonal import seasonal_decompose
 from arch.unitroot import PhillipsPerron as pprtest
 from arch.unitroot import DFGLS
-from statsmodels.tsa.seasonal import seasonal_decompose
-from statsmodels.tsa.stattools import acf, pacf
+from statsmodels.tsa.stattools import adfuller, kpss, acf, pacf
 from statsmodels.tsa.arima.model import ARIMA
-import numpy as np
+
+# Gráficos
+import plotly.graph_objects as go
+
+# Importaciones locales
+from captura_opciones import leer_opciones_pantalla
+from carga_serie_temporal import auto_conversion_datetime
+from descripciones import descripcion
 
 class SerieTemporal:
     def __init__(self, dataframe, columna_temporal, columna_valores):
-        self.dataframe = self.conversion_a_serie_temp(dataframe, columna_temporal)
+        self.dataframe = self.__conversion_a_serie_temp(dataframe, columna_temporal)
         self.columna_valores = columna_valores
-        # Normalizar los datos numéricos
-        # self.dataframe["Valores_norm"] = self.dataframe[self.columna_valores]
         
-    # Visualizar las series de tiempo en graficos separados
-    def visualizar_serie(dataframe):
-        dataframe.plot(subplots=True, figsize=(10, 6))
+    def __conversion_a_serie_temp(self, dataframe, columna):
+        # Convertir la columna de texto a datetime
+        dataframe[columna] = auto_conversion_datetime(dataframe[columna])
+        dataframe.set_index(columna, inplace=True)
+        dataframe = dataframe.asfreq(dataframe.index[1]-dataframe.index[0])
+        print("La frecuencia de la serie temporal es:", dataframe.index.freq)
+        dataframe = dataframe.sort_index()
+        print(f'Número de filas con missing values: {dataframe.isnull().any(axis=1).sum()}')
+        return dataframe
+
+    # Visualizaciones previas
+    def visualizar_serie(self):
+        """
+        Visualizar las columnas de la serie de tiempo en gráficos separados. 
+        No interactivo.
+        """
+        self.dataframe.plot(subplots=True, figsize=(10, 6))
         plt.show()
 
+    def grafica_interactiva(self):
+        """
+        Gráfica interactiva de la columna que contiene la serie a estudiar (endógena)
+        """
+        secuencia_temporal = self.dataframe[self.columna_valores]
+        serie_objetivo = go.Scatter(x=secuencia_temporal.index, 
+                                    y=secuencia_temporal.values, 
+                                    name = self.columna_valores, 
+                                    line=dict(color='red', width=0.7), 
+                                    yaxis='y2')
+
+        titulo_grafico = f"Serie temporal de la columna {self.columna_valores}"
+        layout_temp = go.Layout(title=titulo_grafico, 
+                                xaxis=dict(title='Referencia temporal'),
+                                yaxis=dict(title = self.columna_valores, color='royalblue'))
+        fig = go.Figure(data=[serie_objetivo], layout=layout_temp)
+        fig.show()
+
+        print("Añade otra columna al gráfico")
+        opciones = dict((str(num), columna) for num, columna in enumerate(self.dataframe.columns))
+        decision = leer_opciones_pantalla(opciones)
+        columna_adyacente = opciones[decision]
+        print(columna_adyacente)
         
+        serie_adyacente = go.Scatter(x=secuencia_temporal.index, 
+                                    y=self.dataframe[columna_adyacente].values, 
+                                    name = columna_adyacente, 
+                                    line=dict(color='blue', width=0.7), 
+                                    yaxis='y')
+        
+        titulo_grafico = f'Gráfico de {self.columna_valores} y {columna_adyacente}'
+        layout_temp = go.Layout(title=titulo_grafico, xaxis=dict(title='Fecha'),
+                   yaxis=dict(title=self.columna_valores, color='royalblue', overlaying='y2'),
+                   yaxis2=dict(title=columna_adyacente, color='purple', side='right')    )
+        
+        fig = go.Figure(data=[serie_objetivo, serie_adyacente], layout=layout_temp)
+        fig.show()
+
+
+
     def normalizador(self):
         """
         Normaliza los datos preguntando por el algoritmo de normalización más conveniente
@@ -60,18 +115,9 @@ class SerieTemporal:
             dataframe[columna] = normalized_data[columna].tolist() 
 
         # Actualizamos el objeto serie
-        self.dataframe = dataframe
+        self.dataframe_normalizado = dataframe
         return dataframe 
 
-    def conversion_a_serie_temp(self, dataframe, columna):
-        # Convertir la columna de texto a datetime
-        dataframe[columna] = auto_conversion_datetime(dataframe[columna])
-        dataframe.set_index(columna, inplace=True)
-        dataframe = dataframe.asfreq(dataframe.index[1]-dataframe.index[0])
-        print("La frecuencia de la serie temporal es:", dataframe.index.freq)
-        dataframe = dataframe.sort_index()
-        print(f'Número de filas con missing values: {dataframe.isnull().any(axis=1).sum()}')
-        return dataframe
 
     def descripcion(self):
         print(descripcion(self.dataframe))
@@ -201,17 +247,7 @@ class SerieTemporal:
             plt.show()
 
         
-    def grafica_interactiva(self):
-        # Gráfica interactiva
-        df = self.dataframe
-        data_columns = df.columns
-        column_name = data_columns[0]
-        data_sequence = df[column_name]
-        layout_temp = go.Layout(title='Serie Temporal', xaxis=dict(title='Fecha'),
-                                yaxis=dict(title=column_name, 
-                                    color='royalblue'))
-        fig = go.Figure(data=data_sequence, layout=layout_temp)
-        fig.show()
+
     
     def verifica_nan(self):
         rango_completo = pd.date_range(
