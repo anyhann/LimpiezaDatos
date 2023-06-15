@@ -35,7 +35,12 @@ class SerieTemporal:
         print(f'Número de filas con missing values: {dataframe.isnull().any(axis=1).sum()}')
         return dataframe
 
-    # Visualizaciones previas
+    # Exploraciones y Visualizaciones previas
+    def descripcion(self):
+        print(descripcion(self.dataframe))
+        print("La frecuencia de la serie temporal es:", self.dataframe.index.freq)
+        print(f'Número de filas con missing values: {self.dataframe.isnull().any(axis=1).sum()}')
+
     def visualizar_serie(self):
         """
         Visualizar las columnas de la serie de tiempo en gráficos separados. 
@@ -82,8 +87,7 @@ class SerieTemporal:
         fig = go.Figure(data=[serie_objetivo, serie_adyacente], layout=layout_temp)
         fig.show()
 
-
-
+    # Transformaciones
     def normalizador(self):
         """
         Normaliza los datos preguntando por el algoritmo de normalización más conveniente
@@ -118,14 +122,9 @@ class SerieTemporal:
         self.dataframe_normalizado = dataframe
         return dataframe 
 
-
-    def descripcion(self):
-        print(descripcion(self.dataframe))
-        print("La frecuencia de la serie temporal es:", self.dataframe.index.freq)
-        print(f'Número de filas con missing values: {self.dataframe.isnull().any(axis=1).sum()}')
         
     def plot_boxplots(dataframe):
-    # Obtener la lista de columnas del DataFrame
+        # Obtener la lista de columnas del DataFrame
         columns = dataframe.columns
 
         # Crear una figura y ejes para los boxplots
