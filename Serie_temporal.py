@@ -14,6 +14,7 @@ from arch.unitroot import DFGLS
 from statsmodels.tsa.seasonal import seasonal_decompose
 from statsmodels.tsa.stattools import acf, pacf
 from statsmodels.tsa.arima.model import ARIMA
+import numpy as np
 
 class SerieTemporal:
     def __init__(self, dataframe, columna_temporal, columna_valores):
@@ -76,6 +77,53 @@ class SerieTemporal:
         print(descripcion(self.dataframe))
         print("La frecuencia de la serie temporal es:", self.dataframe.index.freq)
         print(f'Número de filas con missing values: {self.dataframe.isnull().any(axis=1).sum()}')
+        
+    def plot_boxplots(dataframe):
+    # Obtener la lista de columnas del DataFrame
+        columns = dataframe.columns
+
+        # Crear una figura y ejes para los boxplots
+        fig, axes = plt.subplots(nrows=len(columns), figsize=(12, 6 * len(columns)))
+
+        # Iterar sobre cada columna y crear el boxplot correspondiente
+        for i, column in enumerate(columns):
+            ax = axes[i]
+            ax.boxplot(dataframe[column])
+            ax.set_title(f"Boxplot de {column}")
+            ax.set_ylabel("Valores")
+
+        # Ajustar el espaciado entre subplots
+        plt.tight_layout()
+
+        # Mostrar los boxplots
+        plt.show()
+
+    def eliminar_outliers(dataframe):
+        # Imprimir la forma (número de filas y columnas) del dataframe original
+        print(f'dataframe original: {dataframe.shape}')
+
+        # Crear una lista para almacenar los índices de las filas sin valores atípicos
+        filas_filtradas = []
+
+        # Iterar sobre cada fila del DataFrame
+        for fila in dataframe.index:
+            # Verificar si hay valores atípicos en alguna de las columnas de la fila actual
+            if not any(
+                (dataframe.loc[fila, columna] < dataframe[columna].quantile(0.25) - 1.5 * (dataframe[columna].quantile(0.75) - dataframe[columna].quantile(0.25))) or
+                (dataframe.loc[fila, columna] > dataframe[columna].quantile(0.75) + 1.5 * (dataframe[columna].quantile(0.75) - dataframe[columna].quantile(0.25)))
+                for columna in dataframe.columns
+            ):
+                # Agregar el índice de la fila a la lista de filas filtradas
+                filas_filtradas.append(fila)
+
+        # Crear un nuevo DataFrame con las filas filtradas
+        dataframe = dataframe.loc[filas_filtradas]
+
+        # Imprimir la forma del dataframe filtrado
+        print(f'dataframe filtrado: {dataframe.shape}')
+
+        # Devolver el DataFrame filtrado
+        return dataframe
 
     # Descomponer las series de tiempo en tendencia, estacionalidad y residuos
     def seasonal_decompose_func(dataframe, num_period):
