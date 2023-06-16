@@ -21,9 +21,14 @@ from carga_serie_temporal import auto_conversion_datetime
 from descripciones import descripcion
 
 class SerieTemporal:
-    def __init__(self, dataframe, columna_temporal, columna_valores):
-        self.dataframe = self.__conversion_a_serie_temp(dataframe, columna_temporal)
-        self.columna_valores = columna_valores
+    def __init__(self, dataframe, columna_valores, columna_temporal):
+        if isinstance(dataframe.index, pd.DatetimeIndex):
+            self.dataframe = dataframe
+            if not self.verifica_index_nan():
+                self.ajustar_periodicidad()
+        else:
+            self.dataframe = self.__conversion_a_serie_temp(dataframe, columna_temporal)
+        self.dataframe = columna_valores
         
     def __conversion_a_serie_temp(self, dataframe, columna):
         # Convertir la columna de texto a datetime
@@ -35,8 +40,27 @@ class SerieTemporal:
         print(f'Número de filas con missing values: {dataframe.isnull().any(axis=1).sum()}')
         return dataframe
     
+    def verifica_index_nan(self):
+        """
+        Función que verifica si faltan intervalos en el índice temporal
+        """
+        rango_completo = pd.date_range(
+        start = self.dataframe.index.min(),
+        end = self.dataframe.index.max(),
+        freq = self.dataframe.index.freq)
+        
+        verificacion = (self.dataframe.index == rango_completo).all()
+        if verificacion == True:
+            print("No hay valores nulos en el índice")
+        else:
+            print("Hay valores nulos")
+            print(f'Número de filas con missing values en el índice: {self.dataframe.isnull().any(axis=1).sum()}')
+        return verificacion
+
     # Para comprobar, ajustar la periodicidad y completar los registros de una serie de tiempo ya indexada.
-    def ajustar_periodicidad(dataframe):
+    
+    def ajustar_periodicidad(self):
+        dataframe = self.dataframe
         print("Elige el método de rellenado de datos faltantes")
         metodos_disponibles_explicados = {"1": 'pad', "2": 'ffill: Rellena con el valor siguiente', "3": 'backfill: Rellena con el valor anterior', "4": 'bfill', "5": 'nearest', "6": 'linear: Interploación lineal', "7": 'quadratic: Interpolación con función cuadrática', "8": 'cubic'}
         metodo = leer_opciones_pantalla(metodos_disponibles_explicados)
@@ -44,6 +68,7 @@ class SerieTemporal:
         df_time_diffs = dataframe.index.to_series().diff().dt.total_seconds()
         frecuencia_moda = df_time_diffs.value_counts().index[0]
         dataframe = dataframe.asfreq(freq=(str(int(frecuencia_moda)))+ "S", method=metodos_disponibles[metodo])
+        self.dataframe = dataframe
         return dataframe
     
 
@@ -242,22 +267,7 @@ class SerieTemporal:
             plt.title('Función de Autocorrelación Parcial')
             plt.show()
 
-    def verifica_index_nan(self):
-        """
-        Función que verifica si faltan intervalos en el índice temporal
-        """
-        rango_completo = pd.date_range(
-        start = self.dataframe.index.min(),
-        end = self.dataframe.index.max(),
-        freq = self.dataframe.index.freq)
-        
-        verificacion = (self.dataframe.index == rango_completo).all()
-        if verificacion == True:
-            print("No hay valores nulos en el índice")
-        else:
-            print("Hay valores nulos")
-            print(f'Número de filas con missing values en el índice: {self.dataframe.isnull().any(axis=1).sum()}')
-        return verificacion
+
     
     def __getattr__(self, attr):
         # Redirigir el acceso a los atributos al atributo 'dataframe'
