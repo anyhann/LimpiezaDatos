@@ -122,7 +122,6 @@ class SerieTemporal:
         self.dataframe_normalizado = dataframe
         return dataframe 
 
-        
     def plot_boxplots(dataframe):
         # Obtener la lista de columnas del DataFrame
         columns = dataframe.columns
@@ -228,27 +227,12 @@ class SerieTemporal:
             plt.stem(lag_pacf)
             plt.title('Función de Autocorrelación Parcial')
             plt.show()
-    
-    # Analizar las autocorrelaciones y autocorrelaciones parciales
-    def autocor_graficos(dataframe, columna, num_lags):
-        for columna in dataframe.columns:
-            print(f"ACF y PACF para {columna}:")
-            lag_acf = acf(dataframe[columna], nlags=num_lags)
-            lag_pacf = pacf(dataframe[columna], nlags=num_lags)
-
-            plt.subplot(121)
-            plt.stem(lag_acf)
-            plt.title('Función de Autocorrelación')
-
-            plt.subplot(122)
-            plt.stem(lag_pacf)
-            plt.title('Función de Autocorrelación Parcial')
-            plt.show()
-
-        
 
     
-    def verifica_nan(self):
+    def verifica_index_nan(self):
+        """
+        Función que verifica si faltan intervalos en el índice temporal
+        """
         rango_completo = pd.date_range(
         start = self.dataframe.index.min(),
         end = self.dataframe.index.max(),
@@ -256,16 +240,28 @@ class SerieTemporal:
         
         verificacion = (self.dataframe.index == rango_completo).all()
         if verificacion == True:
-            print("No hay valores nulos")
+            print("No hay valores nulos en el índice")
         else:
             print("Hay valores nulos")
-            print(f'Número de filas con missing values: {self.dataframe.isnull().any(axis=1).sum()}')
+            print(f'Número de filas con missing values en el índice: {self.dataframe.isnull().any(axis=1).sum()}')
         return verificacion
     
     def __getattr__(self, attr):
         # Redirigir el acceso a los atributos al atributo 'dataframe'
         return getattr(self.dataframe, attr)
 
+    def __rellenar_nulos_bool(self, columna):
+        columna_sin_nans = self.dataframe[columna].tolist()
+        for i in range(len(columna_sin_nans)):
+            if columna_sin_nans[i] is None:
+                if i > 0 and columna_sin_nans[i-1] is not None and columna[i+1] is not None:
+                    if columna_sin_nans[i-1] == columna_sin_nans[i+1]:
+                        columna_sin_nans[i] = columna_sin_nans[i-1]
+                elif columna_sin_nans[i+1] is not None:
+                    columna_sin_nans[i] = columna_sin_nans[i-1]
+        self.dataframe[columna] = columna_sin_nans
+        return self.dataframe
+    
     def __rellena_aislados(self, columna):
         """
         Rellena valores nulos aislados, es decir, que tengan valor no nulo antes y después
@@ -305,17 +301,6 @@ class SerieTemporal:
         self.dataframe = sin_nans
         return sin_nans
     
-    def __rellenar_nulos_bool(self, columna):
-        columna_sin_nans = self.dataframe[columna].tolist()
-        for i in range(len(columna_sin_nans)):
-            if columna_sin_nans[i] is None:
-                if i > 0 and columna_sin_nans[i-1] is not None and columna[i+1] is not None:
-                    if columna_sin_nans[i-1] == columna_sin_nans[i+1]:
-                        columna_sin_nans[i] = columna_sin_nans[i-1]
-                elif columna_sin_nans[i+1] is not None:
-                    columna_sin_nans[i] = columna_sin_nans[i-1]
-        self.dataframe[columna] = columna_sin_nans
-        return self.dataframe
 
     def test_stationarity(dataframe, columna):
         nombre_test = ""
