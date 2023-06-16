@@ -23,29 +23,35 @@ serie = SerieTemporal(datos, "Time", "Demand")
 serie.descripcion()
 
 input("Intro para continuar")
-# Sección representaciones gráficas
 
-print(serie.test_estacionaria())
-
+# Corrección de valores perdidos
 serie.completa_nans("Demand")
 serie.completa_nans("Temperature")
 serie.completa_nans("Holiday")
 
 
-input("")
-
-
+# Sección representaciones gráficas
 """
 decision = input("¿Deseas ver la serie temporal?[S/N]: ")
 if decision.lower() =="s":
     # serie.visualizar_serie()
     serie.grafica_interactiva()
 
-
+# Normalización
 serie.normalizador()
 print(serie.dataframe_normalizado)
 
 """
+# Estacionariedad
+print(serie.test_estacionaria())
+
+
+
+
+input("")
+
+
+
 
 
 
