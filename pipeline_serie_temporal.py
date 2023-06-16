@@ -6,7 +6,7 @@ import os
 # Carga del csv desde la carpeta de datos
 def carga_csv(nombre_archivo, elimina_cols = []):
     main_file_path = os.path.abspath(__file__)
-    datos = cargador(os.path.join(os.path.dirname(main_file_path), "datos", "vic_elec.csv"))
+    datos = cargador(os.path.join(os.path.dirname(main_file_path), "datos", nombre_archivo))
     for columna in elimina_cols:
         datos.drop(columna, axis=1, inplace= True)
     return datos
@@ -25,10 +25,12 @@ serie.descripcion()
 input("Intro para continuar")
 
 # Corrección de valores perdidos
-serie.completa_nans("Demand")
-serie.completa_nans("Temperature")
-serie.completa_nans("Holiday")
-
+serie.completar_valores_nulos("Demand")
+serie.descripcion()
+serie.completar_valores_nulos("Temperature")
+serie.descripcion()
+serie.completar_valores_nulos("Holiday")
+serie.descripcion()
 
 # Sección representaciones gráficas
 """

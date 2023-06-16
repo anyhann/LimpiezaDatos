@@ -2,10 +2,11 @@ import pandas as pd
 import numpy as np
 from captura_opciones import leer_opciones_pantalla
 
-def completar_valores_nulos(dataframe, columna):
+def completar_valores_nulos(self, columna):
     '''
     Esta función rellena los valores nulos de la columna deseada con los métodos de interpolación, moda o media.
     '''
+    dataframe = self.dataframe
     print("Seleccione el método para completar los valores nulos:")
     metodo = leer_opciones_pantalla({"1": "Interpolación lineal", "2": "Interpolación temporal", "3": "Moda", "4": "Media"})
     if metodo == "1":
@@ -20,7 +21,7 @@ def completar_valores_nulos(dataframe, columna):
         dataframe[columna].fillna(media, inplace = True)
     else:
         print("Método inválido. No se realizaron cambios.")
-
+    self.dataframe = dataframe
     return dataframe
 
 # Crear un DataFrame de ejemplo
