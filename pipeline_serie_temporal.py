@@ -19,12 +19,13 @@ serie = SerieTemporal(datos, "Time", "Demand")
 serie.descripcion()
 
 # Sección representaciones gráficas
-"""
+
+
 decision = input("¿Deseas ver la serie temporal?[S/N]: ")
 if decision.lower() =="s":
     # serie.visualizar_serie()
     serie.grafica_interactiva()
-"""
+
 
 serie.normalizador()
 print(serie.dataframe_normalizado)
