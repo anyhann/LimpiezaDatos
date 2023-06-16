@@ -16,6 +16,7 @@ Incluye archivos en Python para la limpieza de datos
     - Automáticamente debería estudiar estacionariedad. (¿DECORADORES?)
     - Si es estacional, debe graficar autocorrelación y autocorrelación parcial
 
+
 - Introducir modelos de clasificación, regresión y clusterización
 - Para Clasificador.py
     - Método para quitar nans
