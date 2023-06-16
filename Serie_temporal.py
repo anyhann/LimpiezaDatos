@@ -81,8 +81,8 @@ class SerieTemporal:
         
         titulo_grafico = f'Gráfico de {self.columna_valores} y {columna_adyacente}'
         layout_temp = go.Layout(title=titulo_grafico, xaxis=dict(title='Fecha'),
-                   yaxis=dict(title=self.columna_valores, color='royalblue', overlaying='y2'),
-                   yaxis2=dict(title=columna_adyacente, color='purple', side='right')    )
+                    yaxis=dict(title=self.columna_valores, color='royalblue', overlaying='y2'),
+                    yaxis2=dict(title=columna_adyacente, color='purple', side='right')    )
         
         fig = go.Figure(data=[serie_objetivo, serie_adyacente], layout=layout_temp)
         fig.show()
