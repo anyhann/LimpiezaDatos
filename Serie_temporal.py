@@ -37,11 +37,12 @@ class SerieTemporal:
     
     # Para comprobar, ajustar la periodicidad y completar los registros de una serie de tiempo ya indexada.
     def ajustar_periodicidad(dataframe):
-        frequencia = {1: 'H', 2: 'D', 3: 'B', 4: 'W', 5: 'M', 6: 'Q', 7: 'A'}
-        metodo = {1: 'pad', 2: 'ffill', 3: 'backfill', 4: 'bfill', 5: 'nearest', 6: 'linear', 7: 'quadratic', 8: 'cubic'}
+        print("Elige el método de rellenado de datos faltantes")
+        metodos_disponibles = {"1": 'pad', "2": 'ffill', "3": 'backfill', "4": 'bfill', "5": 'nearest', "6": 'linear', "7": 'quadratic', "8": 'cubic'}
+        metodo = leer_opciones_pantalla(metodos_disponibles)
         df_time_diffs = dataframe.index.to_series().diff().dt.total_seconds()
-        print(df_time_diffs.value_counts())
-        dataframe = dataframe.asfreq(freq=frequencia, method=metodo)
+        frecuencia_moda = df_time_diffs.value_counts().index[0]
+        dataframe = dataframe.asfreq(freq=(str(int(frecuencia_moda)))+ "S", method=metodos_disponibles[metodo])
         return dataframe
     
 
