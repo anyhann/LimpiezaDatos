@@ -34,6 +34,18 @@ class SerieTemporal:
         dataframe = dataframe.sort_index()
         print(f'Número de filas con missing values: {dataframe.isnull().any(axis=1).sum()}')
         return dataframe
+    
+    # Para comprobar, ajustar la periodicidad y completar los registros de una serie de tiempo ya indexada.
+    def ajustar_periodicidad(dataframe):
+        frequencia = {1: 'H', 2: 'D', 3: 'B', 4: 'W', 5: 'M', 6: 'Q', 7: 'A'}
+        metodo = {1: 'pad', 2: 'ffill', 3: 'backfill', 4: 'bfill', 5: 'nearest', 6: 'linear', 7: 'quadratic', 8: 'cubic'}
+        df_time_diffs = dataframe.index.to_series().diff().dt.total_seconds()
+        print(df_time_diffs.value_counts())
+        dataframe = dataframe.asfreq(freq=frequencia, method=metodo)
+        return dataframe
+    
+
+    
 
     # Exploraciones y Visualizaciones previas
     def descripcion(self):
