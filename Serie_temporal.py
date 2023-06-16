@@ -301,7 +301,7 @@ class SerieTemporal:
         return sin_nans
     
 
-    def test_stationarity(self):
+    def test_estacionaria(self):
         """
         Comprueba la estacionariedad de la serie temporal
         """
@@ -314,7 +314,6 @@ class SerieTemporal:
         print('Valor p:', result[1])
         print('Valores críticos:', result[4])
         if result[1] < 0.05:
-            print('La serie temporal es estacionaria')
             estacionaria = True
             nombre_test = "Dickey-Fuller augmenté (ADF)"
 
@@ -325,7 +324,6 @@ class SerieTemporal:
             print('Valor p:', result[1])
             print('Valores críticos:', result[3])
             if result[1] < 0.05:
-                print('La serie temporal no es estacionaria')
                 estacionaria = False
                 nombre_test = "KPSS"
 
@@ -339,7 +337,6 @@ class SerieTemporal:
                 print('\t{}: {}'.format(key, value))
             if result.pvalue < 0.05:
                 print('La serie temporal es estacionaria')
-                estacionaria = True
                 nombre_test = "Phillips Perron"
 
         # Test de Dickey-Fuller généralisé à moindres carrés (GLS)
@@ -352,11 +349,11 @@ class SerieTemporal:
                 print('\t{}: {}'.format(key, value))
             if dfgls.pvalue < 0.05:
                 print('La serie temporal es estacionaria')
-                estacionaria = True
                 nombre_test = "DFGLS"
 
         valor = "" if estacionaria == True else "no "
         mensaje = f"La serie temporal {valor}es estacionaria según el test de {nombre_test} con valor p= {result[1]}"
+        self.estacionaria = True
         return mensaje
     
         # Separación datos train-val-test

@@ -16,10 +16,7 @@ datos = carga_csv("vic_elec.csv")
 print(datos.describe(include="all").T)
 """
 
-input("Intro para continuar")
 datos = carga_csv("vic_elec_nans.csv", elimina_cols=["Date", "Unnamed: 0"])
-
-
 
 serie = SerieTemporal(datos, "Time", "Demand")
 
@@ -28,7 +25,7 @@ serie.descripcion()
 input("Intro para continuar")
 # Sección representaciones gráficas
 
-print(serie.test_stationarity())
+print(serie.test_estacionaria())
 
 serie.completa_nans("Demand")
 serie.completa_nans("Temperature")
