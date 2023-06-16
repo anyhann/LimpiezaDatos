@@ -301,14 +301,15 @@ class SerieTemporal:
         return sin_nans
     
 
-    def test_stationarity(dataframe, columna):
+    def test_stationarity(self):
         """
         Comprueba la estacionariedad de la serie temporal
         """
+        serie_objetivo = self.dataframe[self.columna_valores]
         nombre_test = ""
         estacionaria = None
         # Test de Dickey-Fuller augmenté (ADF)
-        result = adfuller(dataframe[columna])
+        result = adfuller(serie_objetivo)
         print('Estadística de prueba ADF:', result[0])
         print('Valor p:', result[1])
         print('Valores críticos:', result[4])
@@ -319,7 +320,7 @@ class SerieTemporal:
 
         # Test de KPSS
         if estacionaria == None:
-            result = kpss(dataframe[columna])
+            result = kpss(serie_objetivo)
             print('Estadística de prueba KPSS:', result[0])
             print('Valor p:', result[1])
             print('Valores críticos:', result[3])
@@ -330,7 +331,7 @@ class SerieTemporal:
 
         # Test de Phillips Perron
         if estacionaria == None:
-            result = pprtest(dataframe[columna])
+            result = pprtest(serie_objetivo)
             print('Estadística de prueba:', result.stat)
             print('Valor p:', result.pvalue)
             print('Valores críticos:')
@@ -343,7 +344,7 @@ class SerieTemporal:
 
         # Test de Dickey-Fuller généralisé à moindres carrés (GLS)
         if estacionaria == None:
-            dfgls = DFGLS(dataframe[columna], lags=10)
+            dfgls = DFGLS(serie_objetivo, lags=10)
             print('Estadística de prueba:', dfgls.stat)
             print('Valor p:', dfgls.pvalue)
             print('Valores críticos:')

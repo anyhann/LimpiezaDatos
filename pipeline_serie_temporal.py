@@ -28,6 +28,7 @@ serie.descripcion()
 input("Intro para continuar")
 # Sección representaciones gráficas
 
+print(serie.test_stationarity())
 
 serie.completa_nans("Demand")
 serie.completa_nans("Temperature")
