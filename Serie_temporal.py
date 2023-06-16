@@ -300,7 +300,6 @@ class SerieTemporal:
         self.dataframe = sin_nans
         return sin_nans
     
-
     def test_estacionaria(self):
         """
         Comprueba la estacionariedad de la serie temporal
@@ -358,7 +357,7 @@ class SerieTemporal:
     
         # Separación datos train-val-test
 
-    def separacion_datos (dataframe, fin_train, fin_validacion):
+    def separa_train_val_test(dataframe, fin_train, fin_validacion):
         dataframe_train = dataframe.loc[: fin_train, :]
         dataframe_val   = dataframe.loc[fin_train:fin_validacion, :]
         dataframe_test  = dataframe.loc[fin_validacion:, :]
