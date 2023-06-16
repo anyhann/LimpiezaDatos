@@ -7,13 +7,15 @@ def completar_valores_nulos(dataframe, columna):
     Esta función rellena los valores nulos de la columna deseada con los métodos de interpolación, moda o media.
     '''
     print("Seleccione el método para completar los valores nulos:")
-    metodo = leer_opciones_pantalla({"1": "Interpolar", "2": "Moda", "3": "Media"})
+    metodo = leer_opciones_pantalla({"1": "Interpolación lineal", "2": "Interpolación temporal", "3": "Moda", "4": "Media"})
     if metodo == "1":
-        dataframe[columna].interpolate(method = "linear", inplace = True)
+        dataframe[columna].interpolate(method = "linear", inplace = True, limit_direction = "both")
     elif metodo == "2":
+        dataframe[columna].interpolate(method = "time", inplace = True, limit_direction = "both")
+    elif metodo == "3":
         moda = dataframe[columna].mode()[0]
         dataframe[columna].fillna(moda, inplace = True)
-    elif metodo == "3":
+    elif metodo == "4":
         media = dataframe[columna].mean()
         dataframe[columna].fillna(media, inplace = True)
     else:
