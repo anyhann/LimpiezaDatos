@@ -228,7 +228,6 @@ class SerieTemporal:
             plt.title('Función de Autocorrelación Parcial')
             plt.show()
 
-    
     def verifica_index_nan(self):
         """
         Función que verifica si faltan intervalos en el índice temporal
@@ -303,6 +302,9 @@ class SerieTemporal:
     
 
     def test_stationarity(dataframe, columna):
+        """
+        Comprueba la estacionariedad de la serie temporal
+        """
         nombre_test = ""
         estacionaria = None
         # Test de Dickey-Fuller augmenté (ADF)
@@ -310,9 +312,7 @@ class SerieTemporal:
         print('Estadística de prueba ADF:', result[0])
         print('Valor p:', result[1])
         print('Valores críticos:', result[4])
-        if result[1] > 0.05:
-            print('La serie temporal no es estacionaria')
-        else:
+        if result[1] < 0.05:
             print('La serie temporal es estacionaria')
             estacionaria = True
             nombre_test = "Dickey-Fuller augmenté (ADF)"
@@ -323,10 +323,8 @@ class SerieTemporal:
             print('Estadística de prueba KPSS:', result[0])
             print('Valor p:', result[1])
             print('Valores críticos:', result[3])
-            if result[1] > 0.05:
+            if result[1] < 0.05:
                 print('La serie temporal no es estacionaria')
-            else:
-                print('La serie temporal es estacionaria')
                 estacionaria = False
                 nombre_test = "KPSS"
 
@@ -338,9 +336,7 @@ class SerieTemporal:
             print('Valores críticos:')
             for key, value in result.critical_values.items():
                 print('\t{}: {}'.format(key, value))
-            if result.pvalue > 0.05:
-                print('La serie temporal no es estacionaria')
-            else:
+            if result.pvalue < 0.05:
                 print('La serie temporal es estacionaria')
                 estacionaria = True
                 nombre_test = "Phillips Perron"
@@ -353,9 +349,7 @@ class SerieTemporal:
             print('Valores críticos:')
             for key, value in dfgls.critical_values.items():
                 print('\t{}: {}'.format(key, value))
-            if dfgls.pvalue > 0.05:
-                print('La serie temporal no es estacionaria')
-            else:
+            if dfgls.pvalue < 0.05:
                 print('La serie temporal es estacionaria')
                 estacionaria = True
                 nombre_test = "DFGLS"
@@ -365,6 +359,7 @@ class SerieTemporal:
         return mensaje
     
         # Separación datos train-val-test
+
     def separacion_datos (dataframe, fin_train, fin_validacion):
         dataframe_train = dataframe.loc[: fin_train, :]
         dataframe_val   = dataframe.loc[fin_train:fin_validacion, :]
