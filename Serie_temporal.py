@@ -355,7 +355,19 @@ class SerieTemporal:
         return mensaje
     
         # Separación datos train-val-test
+    #por porcentaje
+    def train_val_test_split_por_porcentaje(dataframe, tr_size=0.8, vl_size=0.1, ts_size=0.1):
+        N = dataframe.shape[0]
+        Ntrain = int(tr_size * N)
+        Nval = int(vl_size * N)
+        Ntst = N - Ntrain - Nval
 
+        train = dataframe[:Ntrain]
+        val = dataframe[Ntrain:Ntrain+Nval]
+        test = dataframe[Ntrain+Nval:]
+
+        return train, val, test
+    #sin porcentaje
     def separa_train_val_test(dataframe, fin_train, fin_validacion):
         dataframe_train = dataframe.loc[: fin_train, :]
         dataframe_val   = dataframe.loc[fin_train:fin_validacion, :]
