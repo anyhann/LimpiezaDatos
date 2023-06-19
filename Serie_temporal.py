@@ -22,21 +22,23 @@ from descripciones import descripcion
 
 class SerieTemporal:
     def __init__(self, dataframe, columna_valores, columna_temporal):
+        self.columna_valores = columna_valores
         if isinstance(dataframe.index, pd.DatetimeIndex):
             self.dataframe = dataframe
-            if not self.verifica_index_nan():
-                self.ajustar_periodicidad()
+            self.ajustar_periodicidad()
         else:
             self.dataframe = self.__conversion_a_serie_temp(dataframe, columna_temporal)
-        self.columna_valores = columna_valores
+            self.ajustar_periodicidad()
         
-    def __conversion_a_serie_temp(self, dataframe, columna):
-        # Convertir la columna de texto a datetime
-        dataframe.loc[:, columna] = auto_conversion_datetime(dataframe[columna])
-        dataframe = dataframe.sort_values(columna)
-        dataframe.set_index(columna, inplace=True)
-        print(f"Valor 1: {dataframe.index[1]}, Valor 0: {dataframe.index[0]}")
-        dataframe = dataframe.asfreq(dataframe.index[1]-dataframe.index[0])
+    def __conversion_a_serie_temp(self, dataframe, col_temporal):
+        # Convertir la col_temporal de texto a datetime
+        dataframe.loc[:, col_temporal] = auto_conversion_datetime(dataframe[col_temporal])
+        dataframe = dataframe.sort_values(col_temporal)
+        dataframe.set_index(col_temporal, inplace=True)
+        #print(f"Valor 1: {dataframe.index[1]}, Valor 0: {dataframe.index[0]}")
+        df_time_diffs = dataframe.index.to_series().diff().dt.total_seconds()
+        frecuencia_moda = df_time_diffs.value_counts().index[0]
+        dataframe = dataframe.asfreq(freq=(str(int(frecuencia_moda)))+ "S")
         print("La frecuencia de la serie temporal es:", dataframe.index.freq)
         dataframe = dataframe.sort_index()
         print(f'Número de filas con missing values: {dataframe.isnull().any(axis=1).sum()}')
@@ -62,16 +64,17 @@ class SerieTemporal:
     # Para comprobar, ajustar la periodicidad y completar los registros de una serie de tiempo ya indexada.
     
     def ajustar_periodicidad(self):
-        dataframe = self.dataframe
-        print("Elige el método de rellenado de datos faltantes")
-        metodos_disponibles_explicados = {"1": 'pad', "2": 'ffill: Rellena con el valor siguiente', "3": 'backfill: Rellena con el valor anterior', "4": 'bfill', "5": 'nearest', "6": 'linear: Interploación lineal', "7": 'quadratic: Interpolación con función cuadrática', "8": 'cubic'}
-        metodo = leer_opciones_pantalla(metodos_disponibles_explicados)
-        metodos_disponibles = {"1": 'pad', "2": 'ffill', "3": 'backfill', "4": 'bfill', "5": 'nearest', "6": 'linear', "7": 'quadratic', "8": 'cubic'}
-        df_time_diffs = dataframe.index.to_series().diff().dt.total_seconds()
-        frecuencia_moda = df_time_diffs.value_counts().index[0]
-        dataframe = dataframe.asfreq(freq=(str(int(frecuencia_moda)))+ "S", method=metodos_disponibles[metodo])
-        self.dataframe = dataframe
-        return dataframe
+        if not self.verifica_index_nan():
+            dataframe = self.dataframe
+            print("Elige el método de rellenado de datos faltantes")
+            metodos_disponibles_explicados = {"1": 'pad', "2": 'ffill: Rellena con el valor siguiente', "3": 'backfill: Rellena con el valor anterior', "4": 'bfill', "5": 'nearest', "6": 'linear: Interploación lineal', "7": 'quadratic: Interpolación con función cuadrática', "8": 'cubic'}
+            metodo = leer_opciones_pantalla(metodos_disponibles_explicados)
+            metodos_disponibles = {"1": 'pad', "2": 'ffill', "3": 'backfill', "4": 'bfill', "5": 'nearest', "6": 'linear', "7": 'quadratic', "8": 'cubic'}
+            df_time_diffs = dataframe.index.to_series().diff().dt.total_seconds()
+            frecuencia_moda = df_time_diffs.value_counts().index[0]
+            dataframe = dataframe.asfreq(freq=(str(int(frecuencia_moda)))+ "S", method=metodos_disponibles[metodo])
+            self.dataframe = dataframe
+            return dataframe
 
     
     # Exploraciones y Visualizaciones previas

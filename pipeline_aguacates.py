@@ -11,28 +11,43 @@ def carga_csv(nombre_archivo, elimina_cols = []):
         datos.drop(columna, axis=1, inplace= True)
     return datos
 
-"""
-datos = carga_csv("vic_elec.csv")
-print(datos.describe(include="all").T)
-"""
 
+def columnas_valores_categoricos(dataframe, max_categorias = 10):
+    columnas_categoricas = dataframe.select_dtypes(include=['object', 'category']).columns
+    columnas_menos_unicos = []
+    for columna in columnas_categoricas:
+        if dataframe[columna].nunique() < max_categorias:
+            columnas_menos_unicos.append(columna)
+    return columnas_menos_unicos
+
+
+# Carga de los datos
 datos = carga_csv("avocado.csv", elimina_cols=["4046","4225","4770","Total Bags","Small Bags","Large Bags","XLarge Bags","year", "Unnamed: 0"])
+
+print(datos.describe(include="all").T)
+print("Éstas columnas tienen valores categóricos:")
+print(columnas_valores_categoricos(datos))
+
+# Separamos los aguacates en dos series temporales en función de si son "orgánicos" o convencionales
 datos["type"]=datos["type"].str.replace("conventional", "0")
 datos["type"]=datos["type"].str.replace("organic", "1")
-
-
-datos_organicas = datos[datos["type"]=="1"]
+datos_organicos = datos[datos["type"]=="1"]
 datos_convencionales = datos[datos["type"]=="0"]
+del datos_organicos["type"]
+del datos_convencionales["type"]
+
+
+# Elegimos un Estado
 datos_calif_convencionales = datos_convencionales[datos_convencionales["region"] == "California"]
 del datos_calif_convencionales["region"]
-print(datos_calif_convencionales.head())
+
+# Descomentar si hubiera fechas duplicadas
 # datos_convencionales = datos_convencionales[~datos_convencionales["Date"].duplicated()]
 
-
+# Creamos la serie temporal
 serie = SerieTemporal(datos_calif_convencionales, "AveragePrice", "Date")
 
 serie.descripcion()
-
 
 
 if not serie.verifica_index_nan():
@@ -43,11 +58,13 @@ else:
 
 
 
-# Corrección de valores perdidos
+# Corrección de valores perdidos (Con aguacates.csv no es necesario)
+"""
 serie.completar_valores_nulos("AveragePrice")
 serie.descripcion()
 serie.completar_valores_nulos("Total Volume")
 serie.descripcion()
+"""
 
 input("Intro para continuar")
 
@@ -58,7 +75,7 @@ if decision.lower() =="s":
     serie.visualizar_serie()
     serie.grafica_interactiva()
 
-"""
+
 # Normalización
 serie.normalizador()
 print(serie.dataframe_normalizado)
@@ -67,7 +84,7 @@ print(serie.dataframe_normalizado)
 # Estacionariedad
 print(serie.test_estacionaria())
 
-
+"""
 
 
 input("")
