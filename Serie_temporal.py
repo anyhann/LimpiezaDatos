@@ -28,12 +28,14 @@ class SerieTemporal:
                 self.ajustar_periodicidad()
         else:
             self.dataframe = self.__conversion_a_serie_temp(dataframe, columna_temporal)
-        self.dataframe = columna_valores
+        self.columna_valores = columna_valores
         
     def __conversion_a_serie_temp(self, dataframe, columna):
         # Convertir la columna de texto a datetime
-        dataframe[columna] = auto_conversion_datetime(dataframe[columna])
+        dataframe.loc[:, columna] = auto_conversion_datetime(dataframe[columna])
+        dataframe = dataframe.sort_values(columna)
         dataframe.set_index(columna, inplace=True)
+        print(f"Valor 1: {dataframe.index[1]}, Valor 0: {dataframe.index[0]}")
         dataframe = dataframe.asfreq(dataframe.index[1]-dataframe.index[0])
         print("La frecuencia de la serie temporal es:", dataframe.index.freq)
         dataframe = dataframe.sort_index()
