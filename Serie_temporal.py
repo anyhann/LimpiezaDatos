@@ -70,10 +70,8 @@ class SerieTemporal:
         dataframe = dataframe.asfreq(freq=(str(int(frecuencia_moda)))+ "S", method=metodos_disponibles[metodo])
         self.dataframe = dataframe
         return dataframe
-    
 
     
-
     # Exploraciones y Visualizaciones previas
     def descripcion(self):
         print(descripcion(self.dataframe))
