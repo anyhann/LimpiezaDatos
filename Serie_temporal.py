@@ -19,6 +19,8 @@ import plotly.graph_objects as go
 from captura_opciones import leer_opciones_pantalla
 from carga_serie_temporal import auto_conversion_datetime
 from descripciones import descripcion
+import matplotlib.pyplot as plt
+from statsmodels.graphics.tsaplots import plot_acf
 
 class SerieTemporal:
     def __init__(self, dataframe, columna_valores, columna_temporal):
@@ -428,3 +430,48 @@ class SerieTemporal:
 
             
         return X_train, Y_train
+    
+    #Funcion de diferenciacion para que la serie quede horizontal y sea estacionaria
+    def diferenciar(self, columna):
+        #introducir numero de veces que se diferencia
+        n = int(input("¿Cuántas veces se diferencia?: "))
+        
+        if n == 0:
+            print("No se diferencia")
+        
+        if n >= 1:
+            serie_dif = self.dataframe[columna].diff().dropna()
+            plt.rcParams.update({'figure.figsize': (12,15), 'figure.dpi':120})
+            fig, axes = plt.subplots(2, 2, sharex=False)
+
+            # Serie Original
+            axes[0, 0].plot(self.dataframe[columna], color="r"); axes [0, 0].set_title('Serie Original') 
+            plot_acf(self.dataframe[columna], ax=axes[0, 1], color="r", lags=30)
+
+            # Primera diferenciación
+            axes[1, 0].plot(serie_dif, color="g"); axes[1, 0].set_title("Diferenciación de Primer orden") 
+            plot_acf(serie_dif, ax=axes[1, 1], color="g", lags=30)
+            plt.show()
+
+
+        elif n >= 2:
+            serie_dif = self.dataframe[columna].diff().dropna()
+            plt.rcParams.update({'figure.figsize': (12,15), 'figure.dpi':120})
+            fig, axes = plt.subplots(3, 2, sharex=False)
+
+            serie_dif_2 = serie_dif.diff().dropna()
+            
+            # Serie Original
+            axes[0, 0].plot(self.dataframe[columna], color="r"); axes [0, 0].set_title('Serie Original') 
+            plot_acf(self.dataframe[columna], ax=axes[0, 1], color="r", lags=30)
+            
+            # primera diferenciación
+            axes[1, 0].plot(serie_dif, color="r"); axes [1, 0].set_title('Serie Original') 
+            plot_acf(serie_dif, ax=axes[1, 1], color="r", lags=30)
+
+
+            # 2nd Difernciacion
+            axes [2, 0].plot(serie_dif_2, color="b"); axes [2, 0].set_title("Diferenciación de segundo orden") 
+            plot_acf(serie_dif_2, ax=axes[2, 1], color="b", lags=30)
+
+        return self.dataframe
