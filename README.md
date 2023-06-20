@@ -22,7 +22,6 @@ Incluye archivos en Python para la limpieza de datos
 - Introducir modelos de clasificación, regresión y clusterización
 - Para Clasificador.py
     - Método para quitar nans
-    - Se puede usar el metodo del boxplot para identificar los outliers.
     y eliminarlos por distancia con nº de rangos intercuartílicos a la mediana.
     - Meterle el normalizador de las series temporales
 - Ordenar las cosas en carpetas
