@@ -1,7 +1,9 @@
+import os
+os.chdir("/home/laptop/Proyectos Python/LimpiezaDatos/LimpiezaDatos")
+
 from Serie_temporal import SerieTemporal
 from carga_datos import cargador
 
-import os
 
 # Carga del csv desde la carpeta de datos
 def carga_csv(nombre_archivo, elimina_cols = []):
