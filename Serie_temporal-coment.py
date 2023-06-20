@@ -19,35 +19,28 @@ import plotly.graph_objects as go
 from captura_opciones import leer_opciones_pantalla
 from carga_serie_temporal import auto_conversion_datetime
 from descripciones import descripcion
-import matplotlib.pyplot as plt
-from statsmodels.graphics.tsaplots import plot_acf
 
 class SerieTemporal:
-    def __init__(self, dataframe, columna_valores, columna_temporal):
+    """muestra el constructor de la clase SerieTemporal."""
+    def __init__(self, dataframe, columna_temporal, columna_valores):
+        self.dataframe = self.__conversion_a_serie_temp(dataframe, columna_temporal)
         self.columna_valores = columna_valores
-        if isinstance(dataframe.index, pd.DatetimeIndex):
-            self.dataframe = dataframe
-            self.ajustar_periodicidad()
+        if not self.verifica_index_nan():
+                self.ajustar_periodicidad()
         else:
             self.dataframe = self.__conversion_a_serie_temp(dataframe, columna_temporal)
-            self.ajustar_periodicidad()
-        
-    def __conversion_a_serie_temp(self, dataframe, col_temporal):
-        """
-        Convertir la col_temporal con los datos de tiempo en tipo str a datetime
-        """
-        dataframe.loc[:, col_temporal] = auto_conversion_datetime(dataframe[col_temporal])
-        dataframe = dataframe.sort_values(col_temporal)
-        dataframe.set_index(col_temporal, inplace=True)
-        #print(f"Valor 1: {dataframe.index[1]}, Valor 0: {dataframe.index[0]}")
-        df_time_diffs = dataframe.index.to_series().diff().dt.total_seconds()
-        frecuencia_moda = df_time_diffs.value_counts().index[0]
-        dataframe = dataframe.asfreq(freq=(str(int(frecuencia_moda)))+ "S")
+        self.dataframe = columna_valores
+
+    def __conversion_a_serie_temp(self, dataframe, columna):
+        """Convertir la columna de texto a datetime"""
+        dataframe[columna] = auto_conversion_datetime(dataframe[columna])
+        dataframe.set_index(columna, inplace=True)
+        dataframe = dataframe.asfreq(dataframe.index[1]-dataframe.index[0])
         print("La frecuencia de la serie temporal es:", dataframe.index.freq)
         dataframe = dataframe.sort_index()
         print(f'Número de filas con missing values: {dataframe.isnull().any(axis=1).sum()}')
         return dataframe
-    
+
     def verifica_index_nan(self):
         """
         Función que verifica si faltan intervalos en el índice temporal
@@ -65,24 +58,23 @@ class SerieTemporal:
             print(f'Número de filas con missing values en el índice: {self.dataframe.isnull().any(axis=1).sum()}')
         return verificacion
 
-    # Para comprobar, ajustar la periodicidad y completar los registros de una serie de tiempo ya indexada.
+    # 
     
     def ajustar_periodicidad(self):
-        if not self.verifica_index_nan():
-            dataframe = self.dataframe
-            print("Elige el método de rellenado de datos faltantes")
-            metodos_disponibles_explicados = {"1": 'pad', "2": 'ffill: Rellena con el valor siguiente', "3": 'backfill: Rellena con el valor anterior', "4": 'bfill', "5": 'nearest', "6": 'linear: Interploación lineal', "7": 'quadratic: Interpolación con función cuadrática', "8": 'cubic'}
-            metodo = leer_opciones_pantalla(metodos_disponibles_explicados)
-            metodos_disponibles = {"1": 'pad', "2": 'ffill', "3": 'backfill', "4": 'bfill', "5": 'nearest', "6": 'linear', "7": 'quadratic', "8": 'cubic'}
-            df_time_diffs = dataframe.index.to_series().diff().dt.total_seconds()
-            frecuencia_moda = df_time_diffs.value_counts().index[0]
-            dataframe = dataframe.asfreq(freq=(str(int(frecuencia_moda)))+ "S", method=metodos_disponibles[metodo])
-            self.dataframe = dataframe
-            return dataframe
-
-    
-    # Exploraciones y Visualizaciones previas
+        """Para comprobar, ajustar la periodicidad y completar los registros de una serie de tiempo ya indexada."""
+        dataframe = self.dataframe
+        print("Elige el método de rellenado de datos faltantes")
+        metodos_disponibles_explicados = {"1": 'pad', "2": 'ffill: Rellena con el valor siguiente', "3": 'backfill: Rellena con el valor anterior', "4": 'bfill', "5": 'nearest', "6": 'linear: Interploación lineal', "7": 'quadratic: Interpolación con función cuadrática', "8": 'cubic'}
+        metodo = leer_opciones_pantalla(metodos_disponibles_explicados)
+        metodos_disponibles = {"1": 'pad', "2": 'ffill', "3": 'backfill', "4": 'bfill', "5": 'nearest', "6": 'linear', "7": 'quadratic', "8": 'cubic'}
+        df_time_diffs = dataframe.index.to_series().diff().dt.total_seconds()
+        frecuencia_moda = df_time_diffs.value_counts().index[0]
+        dataframe = dataframe.asfreq(freq=(str(int(frecuencia_moda)))+ "S", method=metodos_disponibles[metodo])
+        self.dataframe = dataframe
+        return dataframe
+    # 
     def descripcion(self):
+        """Exploraciones y Visualizaciones previas"""
         print(descripcion(self.dataframe))
         print("La frecuencia de la serie temporal es:", self.dataframe.index.freq)
         print(f'Número de filas con missing values: {self.dataframe.isnull().any(axis=1).sum()}')
@@ -133,13 +125,13 @@ class SerieTemporal:
         fig = go.Figure(data=[serie_objetivo, serie_adyacente], layout=layout_temp)
         fig.show()
 
-    # Transformaciones
     def normalizador(self):
         """
+        Transformaciones
         Normaliza los datos preguntando por el algoritmo de normalización más conveniente
         """
         dataframe = self.dataframe
-        # Obtener solo las columnas numéricas
+        """Obtener solo las columnas numéricas"""
         datos_num = dataframe.select_dtypes(include=['int64', 'float64'])
         print(f"Las columnas que se van a normalizar son: {datos_num.columns}")
         print("""Normalizadores disponibles:""")
@@ -160,62 +152,63 @@ class SerieTemporal:
         normalized_data_array = scaler.fit_transform(datos_num)
         normalized_data = pd.DataFrame(normalized_data_array, columns = datos_num.columns)
         
-        #Actualizamos el dataframe original con los datos numericos normalizados
+        """Actualizamos el dataframe original con los datos numericos normalizados"""
         for columna in normalized_data.columns:
             dataframe[columna] = normalized_data[columna].tolist() 
 
-        # Actualizamos el objeto serie
+        """Actualizamos el objeto serie"""
         self.dataframe_normalizado = dataframe
         return dataframe 
 
+        
     def plot_boxplots(dataframe):
-        # Obtener la lista de columnas del DataFrame
+        """Obtener la lista de columnas del DataFrame"""
         columns = dataframe.columns
 
-        # Crear una figura y ejes para los boxplots
+        """Crear una figura y ejes para los boxplots"""
         fig, axes = plt.subplots(nrows=len(columns), figsize=(12, 6 * len(columns)))
 
-        # Iterar sobre cada columna y crear el boxplot correspondiente
+        """Iterar sobre cada columna y crear el boxplot correspondiente"""
         for i, column in enumerate(columns):
             ax = axes[i]
             ax.boxplot(dataframe[column])
             ax.set_title(f"Boxplot de {column}")
             ax.set_ylabel("Valores")
 
-        # Ajustar el espaciado entre subplots
+        """Ajustar el espaciado entre subplots"""
         plt.tight_layout()
 
-        # Mostrar los boxplots
+        """Mostrar los boxplots"""
         plt.show()
 
     def eliminar_outliers(dataframe):
-        # Imprimir la forma (número de filas y columnas) del dataframe original
+        """Imprimir la forma (número de filas y columnas) del dataframe original"""
         print(f'dataframe original: {dataframe.shape}')
 
-        # Crear una lista para almacenar los índices de las filas sin valores atípicos
+        """Crear una lista para almacenar los índices de las filas sin valores atípicos"""
         filas_filtradas = []
 
-        # Iterar sobre cada fila del DataFrame
+        """Iterar sobre cada fila del DataFrame"""
         for fila in dataframe.index:
-            # Verificar si hay valores atípicos en alguna de las columnas de la fila actual
+            """Verificar si hay valores atípicos en alguna de las columnas de la fila actual"""
             if not any(
                 (dataframe.loc[fila, columna] < dataframe[columna].quantile(0.25) - 1.5 * (dataframe[columna].quantile(0.75) - dataframe[columna].quantile(0.25))) or
                 (dataframe.loc[fila, columna] > dataframe[columna].quantile(0.75) + 1.5 * (dataframe[columna].quantile(0.75) - dataframe[columna].quantile(0.25)))
                 for columna in dataframe.columns
             ):
-                # Agregar el índice de la fila a la lista de filas filtradas
+                """Agregar el índice de la fila a la lista de filas filtradas"""
                 filas_filtradas.append(fila)
 
-        # Crear un nuevo DataFrame con las filas filtradas
+        """Crear un nuevo DataFrame con las filas filtradas"""
         dataframe = dataframe.loc[filas_filtradas]
 
-        # Imprimir la forma del dataframe filtrado
+        """Imprimir la forma del dataframe filtrado"""
         print(f'dataframe filtrado: {dataframe.shape}')
 
-        # Devolver el DataFrame filtrado
+        """Devolver el DataFrame filtrado"""
         return dataframe
 
-    # Descomponer las series de tiempo en tendencia, estacionalidad y residuos
+    """Descomponer las series de tiempo en tendencia, estacionalidad y residuos"""
     def seasonal_decompose_func(dataframe, num_period):
         modelo = int(input("Qué tipo de modelo quieres aplicar? (1/multiplicative, 2/additive): "))
         if modelo == 1:
@@ -234,17 +227,17 @@ class SerieTemporal:
         
         plt.figure(figsize=(10, 8))
 
-        # Componente de tendencia
+        """Componente de tendencia"""
         plt.subplot(3, 1, 1)
         plt.plot(trend)
         plt.title('Componente de Tendencia')
 
-        # Componente estacional
+        """Componente estacional"""
         plt.subplot(3, 1, 2)
         plt.plot(seasonal)
         plt.title('Componente Estacional')
 
-        # Componente de residuos
+        """Componente de residuos"""
         plt.subplot(3, 1, 3)
         plt.plot(residual)
         plt.title('Componente de Residuos')
@@ -273,13 +266,31 @@ class SerieTemporal:
             plt.stem(lag_pacf)
             plt.title('Función de Autocorrelación Parcial')
             plt.show()
+    
+    
+    def autocor_graficos(dataframe, columna, num_lags):
+        """
+        Analizar las autocorrelaciones y autocorrelaciones parciales
+        Muestra los gráficos
+        """
+        for columna in dataframe.columns:
+            print(f"ACF y PACF para {columna}:")
+            lag_acf = acf(dataframe[columna], nlags=num_lags)
+            lag_pacf = pacf(dataframe[columna], nlags=num_lags)
 
+            plt.subplot(121)
+            plt.stem(lag_acf)
+            plt.title('Función de Autocorrelación')
 
+            plt.subplot(122)
+            plt.stem(lag_pacf)
+            plt.title('Función de Autocorrelación Parcial')
+            plt.show()
     
     def __getattr__(self, attr):
-        # Redirigir el acceso a los atributos al atributo 'dataframe'
+        """Redirigir el acceso a los atributos al atributo 'dataframe'"""
         return getattr(self.dataframe, attr)
-    
+*
     def completar_valores_nulos(self, columna):
         '''
         Esta función rellena los valores nulos de la columna deseada con los métodos de interpolación, moda o media.
@@ -324,48 +335,57 @@ class SerieTemporal:
             estacionaria = True
             nombre_test = "Dickey-Fuller augmenté (ADF)"
 
+
         # Test de KPSS
         if estacionaria == None:
-            result = kpss(serie_objetivo)
+            result = kpss(dataframe[columna])
             print('Estadística de prueba KPSS:', result[0])
             print('Valor p:', result[1])
             print('Valores críticos:', result[3])
-            if result[1] < 0.05:
+            if result[1] > 0.05:
+                print('La serie temporal no es estacionaria')
+            else:
+                print('La serie temporal es estacionaria')
                 estacionaria = False
                 nombre_test = "KPSS"
 
         # Test de Phillips Perron
         if estacionaria == None:
-            result = pprtest(serie_objetivo)
+            result = pprtest(dataframe[columna])
             print('Estadística de prueba:', result.stat)
             print('Valor p:', result.pvalue)
             print('Valores críticos:')
             for key, value in result.critical_values.items():
                 print('\t{}: {}'.format(key, value))
-            if result.pvalue < 0.05:
+            if result.pvalue > 0.05:
+                print('La serie temporal no es estacionaria')
+            else:
                 print('La serie temporal es estacionaria')
+                estacionaria = True
                 nombre_test = "Phillips Perron"
 
         # Test de Dickey-Fuller généralisé à moindres carrés (GLS)
         if estacionaria == None:
-            dfgls = DFGLS(serie_objetivo, lags=10)
+            dfgls = DFGLS(dataframe[columna], lags=10)
             print('Estadística de prueba:', dfgls.stat)
             print('Valor p:', dfgls.pvalue)
             print('Valores críticos:')
             for key, value in dfgls.critical_values.items():
                 print('\t{}: {}'.format(key, value))
-            if dfgls.pvalue < 0.05:
+            if dfgls.pvalue > 0.05:
+                print('La serie temporal no es estacionaria')
+            else:
                 print('La serie temporal es estacionaria')
+                estacionaria = True
                 nombre_test = "DFGLS"
 
         valor = "" if estacionaria == True else "no "
         mensaje = f"La serie temporal {valor}es estacionaria según el test de {nombre_test} con valor p= {result[1]}"
-        self.estacionaria = True
         return mensaje
     
-        # Separación datos train-val-test
-    #por porcentaje
     def train_val_test_split_por_porcentaje(dataframe, tr_size=0.8, vl_size=0.1, ts_size=0.1):
+        """Separación datos train-val-test
+        por porcentaje"""
         N = dataframe.shape[0]
         Ntrain = int(tr_size * N)
         Nval = int(vl_size * N)
@@ -376,8 +396,10 @@ class SerieTemporal:
         test = dataframe[Ntrain+Nval:]
 
         return train, val, test
-    #sin porcentaje
+    
     def separa_train_val_test(dataframe, fin_train, fin_validacion):
+        """Separación datos train-val-test
+        sin porcentaje"""
         dataframe_train = dataframe.loc[: fin_train, :]
         dataframe_val   = dataframe.loc[fin_train:fin_validacion, :]
         dataframe_test  = dataframe.loc[fin_validacion:, :]
@@ -432,48 +454,3 @@ class SerieTemporal:
 
             
         return X_train, Y_train
-    
-    #Funcion de diferenciacion para que la serie quede horizontal y sea estacionaria
-    def diferenciar(self, columna):
-        #introducir numero de veces que se diferencia
-        n = int(input("¿Cuántas veces se diferencia?: "))
-        
-        if n == 0:
-            print("No se diferencia")
-        
-        if n >= 1:
-            serie_dif = self.dataframe[columna].diff().dropna()
-            plt.rcParams.update({'figure.figsize': (12,15), 'figure.dpi':120})
-            fig, axes = plt.subplots(2, 2, sharex=False)
-
-            # Serie Original
-            axes[0, 0].plot(self.dataframe[columna], color="r"); axes [0, 0].set_title('Serie Original') 
-            plot_acf(self.dataframe[columna], ax=axes[0, 1], color="r", lags=30)
-
-            # Primera diferenciación
-            axes[1, 0].plot(serie_dif, color="g"); axes[1, 0].set_title("Diferenciación de Primer orden") 
-            plot_acf(serie_dif, ax=axes[1, 1], color="g", lags=30)
-            plt.show()
-
-
-        elif n >= 2:
-            serie_dif = self.dataframe[columna].diff().dropna()
-            plt.rcParams.update({'figure.figsize': (12,15), 'figure.dpi':120})
-            fig, axes = plt.subplots(3, 2, sharex=False)
-
-            serie_dif_2 = serie_dif.diff().dropna()
-            
-            # Serie Original
-            axes[0, 0].plot(self.dataframe[columna], color="r"); axes [0, 0].set_title('Serie Original') 
-            plot_acf(self.dataframe[columna], ax=axes[0, 1], color="r", lags=30)
-            
-            # primera diferenciación
-            axes[1, 0].plot(serie_dif, color="r"); axes [1, 0].set_title('Serie Original') 
-            plot_acf(serie_dif, ax=axes[1, 1], color="r", lags=30)
-
-
-            # 2nd Difernciacion
-            axes [2, 0].plot(serie_dif_2, color="b"); axes [2, 0].set_title("Diferenciación de segundo orden") 
-            plot_acf(serie_dif_2, ax=axes[2, 1], color="b", lags=30)
-
-        return self.dataframe
