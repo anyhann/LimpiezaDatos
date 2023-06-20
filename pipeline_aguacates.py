@@ -26,7 +26,7 @@ datos = carga_csv("avocado.csv", elimina_cols=["4046","4225","4770","Total Bags"
 
 print(datos.describe(include="all").T)
 print("Éstas columnas tienen valores categóricos:")
-print(columnas_valores_categoricos(datos))
+print(columnas_valores_categoricos(datos, max_categorias=55))
 
 # Separamos los aguacates en dos series temporales en función de si son "orgánicos" o convencionales
 datos["type"]=datos["type"].str.replace("conventional", "0")
@@ -38,7 +38,7 @@ del datos_convencionales["type"]
 
 
 # Elegimos un Estado
-datos_calif_convencionales = datos_convencionales[datos_convencionales["region"] == "California"]
+datos_calif_convencionales = datos_convencionales[datos_convencionales["region"] == "TotalUS"]
 del datos_calif_convencionales["region"]
 
 # Descomentar si hubiera fechas duplicadas
@@ -83,6 +83,8 @@ print(serie.dataframe_normalizado)
 
 # Estacionariedad
 print(serie.test_estacionaria())
+
+
 
 """
 
