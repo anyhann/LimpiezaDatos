@@ -1,7 +1,7 @@
 import os
 from carga_datos import cargador
 from descripciones import descripcion
-
+from sklearn.preprocessing import OneHotEncoder
 
 
 def cuenta_en_cols(dataframe):
@@ -53,7 +53,15 @@ class Clasificador:
         self.test_X = test_data.drop([columna_clase], axis=1)
         self.test_y = test_data[columna_clase]
 
+  # Aplicar One-Hot Encoding
+        encoder = OneHotEncoder(sparse=False)
+        encoded_train_X = encoder.fit_transform(train_data.drop([columna_clase], axis=1))
+        encoded_test_X = encoder.transform(test_data.drop([columna_clase], axis=1))
 
+        self.train_X = encoded_train_X
+        self.train_y = train_data[columna_clase]
+        self.test_X = encoded_test_X
+        self.test_y = test_data[columna_clase]
 
 
 if __name__ == "__main__":
