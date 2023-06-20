@@ -14,7 +14,7 @@ Incluye archivos en Python para la limpieza de datos
     (Está en el archivo de la teoría Serie temporal desde 0 Mod ARIMA.ipynb)
 - Agregar modelo AR para predecir series temporales.
     - (Está en el archivo de la teoría 01 Demanda energía eléctrica.ipynb)
-- Crear método que diferencie la serie temporal.
+- lo esta haciendo Anabell->Crear método que diferencie la serie temporal.
     - Automáticamente debería estudiar estacionariedad. (¿DECORADORES?)
     - Si es estacionaria, debe graficar autocorrelación y autocorrelación parcial
 
