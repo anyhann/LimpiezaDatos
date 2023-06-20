@@ -31,7 +31,9 @@ class SerieTemporal:
             self.ajustar_periodicidad()
         
     def __conversion_a_serie_temp(self, dataframe, col_temporal):
-        # Convertir la col_temporal de texto a datetime
+        """
+        Convertir la col_temporal con los datos de tiempo en tipo str a datetime
+        """
         dataframe.loc[:, col_temporal] = auto_conversion_datetime(dataframe[col_temporal])
         dataframe = dataframe.sort_values(col_temporal)
         dataframe.set_index(col_temporal, inplace=True)
