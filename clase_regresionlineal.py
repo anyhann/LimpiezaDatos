@@ -1,3 +1,4 @@
+import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn import linear_model
 import statsmodels.api as sm
@@ -9,7 +10,14 @@ class RegresionLineal:
     def __init__(self, dataframe, columna_valores, tr_size=0.8, random_state=42):
        
         self.train_data_X, self.test_data_X, self.train_data_y, self.test_data_y = self.train_test_split_por_porcentaje(dataframe, columna_valores, tr_size, random_state)
-    
+    def descripcion(dataframe :pd.DataFrame) -> pd.DataFrame: # la salida es un DataFrame
+        """
+        Descripción estadística de los datos
+        """
+        salida = dataframe.describe(include = "all").T
+        salida["Nulos"] = dataframe.isnull().sum()
+        salida["Tipos"] = dataframe.dtypes
+        return salida
     def selecciona_columnas_numericas(self,dataframe):
         dataframe = dataframe[dataframe.describe().columns]
         return dataframe
