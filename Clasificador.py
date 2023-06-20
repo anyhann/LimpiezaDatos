@@ -18,41 +18,20 @@ from descripciones import descripcion
 
 
 
-def cuenta_en_cols(dataframe):
-    """
-    Cuenta los valores únicos de cada columna
-    """
-    columnas = dataframe.columns
-    for columna in columnas:
-        cuenta_valores_unicos = dataframe[columna].value_counts()
-        print(f"La columna {columna} tiene {cuenta_valores_unicos} valores únicos")
-
-
-#Creamos el modelo
-from sklearn.linear_model import LogisticRegression
-RegLog = LogisticRegression(C=1.0,
-                            class_weight=None,
-                            dual=False,
-                            fit_intercept=True,
-                            intercept_scaling=1,
-                            max_iter=100,
-                            multi_class='ovr',
-                            n_jobs=1,
-                            penalty='l2',
-                            random_state=None,
-                            solver='liblinear',
-                            tol=0.0001,
-                            verbose=0,
-                            warm_start=False)
-
 class Clasificador:
     def __init__(self, dataframe, columna_clase):
         self.dataframe = dataframe
         self.columna_clase = columna_clase
 
+    def limpieza_nans(self):
+        pass
+
+    def elimina_outliers(self):
+        pass
+
     def separa_train(self, porcentaje=20):
         if porcentaje == 20:
-            porcentaje = input("¿Qué porcentaje de las muestras deseas para el test? (por defecto 20):")
+            porcentaje = int(input("¿Qué porcentaje de las muestras deseas para el test? (por defecto 20):"))
         if porcentaje == "":
             porcentaje = 20
         X = self.dataframe.drop([self.columna_clase], axis=1)
