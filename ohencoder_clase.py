@@ -122,8 +122,8 @@ class DataFrameTransformer():
                 print("Error: Algunos valores no coinciden con el orden jerárquico.")
                 cat_ordenadas = []
             else:
-                datos_ok = True
                 cat_ordenadas.append(orden_valores)
+                datos_ok = True
         return cat_ordenadas
 
     def ordinal_encoder_columna(self, columna):
