@@ -148,9 +148,9 @@ class DataFrameTransformer():
             self.ordinal_encoder_columna(columna)
     
 if __name__ == "__main__":
-    from carga_datos import cargador
-    main_file_path = os.path.abspath(__file__)
-    datos = cargador(os.path.join(os.path.dirname(main_file_path), "datos", "Corredores Latinos con Categorías.csv"))
+    from carga_datos import cargador_datos
+    datos = cargador_datos("Corredores Latinos con Categorías.csv")
     transformador = DataFrameTransformer(datos)
-    opciones = transformador.transforma()
+    datos = transformador.transforma()
+    datos = transformador.transforma()
     print(transformador.df.head(15))
