@@ -8,7 +8,12 @@ class DataFrameTransformer():
     def __init__(self, dataframe):
         self.df = dataframe    
 
-    def isSubset(self, arr, subarr):
+    def isSubset(self, arr, subarr)->bool:
+        """
+        Toma dos arrays y devuelve true si el segundo está incluido en el primero.
+        El resultado es independiente de el orden en el que estén incluidos.
+        Devuelve True sólo si están incluidos todos los elementos del segundo en el primero.
+        """
         check_items = np.full_like(subarr, False)
         
         for idx, x in enumerate(subarr):
@@ -18,15 +23,12 @@ class DataFrameTransformer():
 		
 
     def mostrar_cols_categoricas(self):
-
         porc_min_valores_unicos = 90
         tipos_no_categoricos = ["int64", "float64"]
-
         # Presentar las columnas con un número asignado
         print("Variables categóricas del dataset: ")
         dict_categoricas = {}
         for i, col in enumerate(self.df.columns, 1):
-            
             tipo = self.df[col].dtype
             if tipo not in tipos_no_categoricos:
                 numvals = self.df[col].nunique()
@@ -34,19 +36,18 @@ class DataFrameTransformer():
                 porc = 100-(numvals/self.df.shape[0])*100
                 if (porc > porc_min_valores_unicos):
                     dict_categoricas[i] = col
-                    print(f"{i}. {col} [{tipo}] {col} ({numvals} valores únicos: {vals}, {porc:.2f}%)")
+                    print(f"{i}. {col} [{tipo}] contiene {numvals} valores únicos: {vals}, {porc:.2f}%)")
         
         return dict_categoricas
 
     def elige_opcion(self):
+        """
         
-        print ("\n")
-
+        """
         # Mostrar las columnas categoricas
         dict_categoricas =  self.mostrar_cols_categoricas()
 
         # Solicitar al usuario que elija un tipo de encoding por teclado
-
         print ("\n¿Que tipo de encoding quieres aplicar?")
         opcion_seleccionada = leer_opciones_pantalla({"1": "OneHotEncoder", "2": "OrdinalEncoder", "q": "Salir"})
 
