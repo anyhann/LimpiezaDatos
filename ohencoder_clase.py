@@ -37,27 +37,15 @@ class DataFrameTransformer():
                 if (porc > porc_min_valores_unicos):
                     dict_categoricas[i] = col
                     print(f"{i}. {col} [{tipo}] contiene {numvals} valores únicos: {vals}, {porc:.2f}%)")
-        
         return dict_categoricas
 
     def elige_opcion(self):
-        """
-        
-        """
-        # Mostrar las columnas categoricas
-        dict_categoricas =  self.mostrar_cols_categoricas()
-
-        # Solicitar al usuario que elija un tipo de encoding por teclado
         print ("\n¿Que tipo de encoding quieres aplicar?")
         opcion_seleccionada = leer_opciones_pantalla({"1": "OneHotEncoder", "2": "OrdinalEncoder", "q": "Salir"})
+        return opcion_seleccionada
+    
 
-        if opcion_seleccionada == "q":
-            return
-        
-        # Mostrar las columnas categoricas
-        dict_categoricas =  self.mostrar_cols_categoricas()
-        print("\n")
-
+    def elige_columnas(self, dict_categoricas):
         resultado_validar = False
         while resultado_validar == False:
             cols_seleccionadas = input("Introduce los índices de las columnas sobre las que quieres aplicar el encoding, separadas por coma: ")
@@ -75,11 +63,25 @@ class DataFrameTransformer():
 
             if (not resultado_validar):
                 print("Error: Algunos valores no coinciden con los índices de las columnas disponibles.")
-        
-
         columnas_seleccionadas_nombres = [self.df.columns[idx] for idx in indices_seleccionados]
         str_columnas_seleccionadas = ", ".join(columnas_seleccionadas_nombres)
         print(f"Se crearán los dummies para las columnas: {str_columnas_seleccionadas}")
+        
+        return columnas_seleccionadas_nombres
+
+
+    def transforma(self):
+        """
+        Hace la transformación deseada en las columnas que responda el usuario.
+        """
+        # Mostrar las columnas categoricas
+        dict_categoricas =  self.mostrar_cols_categoricas()
+        # Solicitar al usuario que elija un tipo de encoding por teclado
+        opcion_seleccionada = self.elige_opcion()
+        # Mostrar las columnas categoricas
+        dict_categoricas =  self.mostrar_cols_categoricas()
+        # Solicitar al usuario las columnas a transformar
+        columnas_seleccionadas_nombres = self.elige_columnas(dict_categoricas)
 
         if (opcion_seleccionada == "1"):
             dummies_df = self.crea_dummies(columnas_seleccionadas_nombres)
@@ -95,66 +97,60 @@ class DataFrameTransformer():
 
 
     def crea_dummies(self, columnas_seleccionadas): 
-        
         for col in columnas_seleccionadas:
             # Para cada columna seleccionada, aplicar OneHotEncoding
             self.df = pd.concat([self.df, pd.get_dummies(self.df[col], prefix=col, prefix_sep='_')], axis=1)
 
-            #Borrar la columna original
+            # Borrar la columna original
             self.df = self.df.drop(col, axis=1)
 
         return transformador.df
     
-    
+    def pregunta_orden_categorias(self, valores_columnas):
+        datos_ok = False
+        cat_ordenadas = []
+        while datos_ok == False:
+            # Solicitar al usuario que elija el orden de los valores por orden jerárquico
+            print("Escribe los valores en el orden jerárquico deseado separados por comas:")
+            orden_valores = input().split(",")
+
+            # Eliminar espacios en blanco alrededor de los valores ingresados
+            orden_valores = [valor.strip() for valor in orden_valores]
+
+            # Verificar si todos los valores únicos están presentes en el orden jerárquico
+            if set(valores_columnas) != set(orden_valores):
+                print("Error: Algunos valores no coinciden con el orden jerárquico.")
+                cat_ordenadas = []
+            else:
+                datos_ok = True
+                cat_ordenadas.append(orden_valores)
+        return cat_ordenadas
+
+    def ordinal_encoder_columna(self, columna):
+        print(f"Valores únicos de la columna seleccionada {columna}:")
+        valores_columnas = self.df[columna].unique()
+        print(valores_columnas)
+        categorias_ordenadas = self.pregunta_orden_categorias(valores_columnas)
+        # Aplicar la transformación ordinal, de valores a números
+        encoder = OrdinalEncoder(categories=categorias_ordenadas)
+        columna_codificar_reshaped = self.df[columna].values.reshape(-1, 1)
+        valores_transformados = encoder.fit_transform(columna_codificar_reshaped)
+
+        df_transformados = pd.DataFrame(valores_transformados, columns=[columna])
+        data_transformado = self.df.drop(columna, axis=1)
+        data_transformado = pd.concat([data_transformado, df_transformados], axis=1)
+        self.df = data_transformado
+        return self.df
+
     def ordinal_encoder(self, nombres_cols_seleccionadas):
         # Mostrar los valores únicos de la columna seleccionada al usuario
-        lista_categorias_todas_cols = []
-        for i in nombres_cols_seleccionadas:
-            print(f"Valores únicos de la columna seleccionada {i}:")
-            valores_columnas = self.df[i].unique()
-            print(valores_columnas)
-
-            datos_ok = False
-            while datos_ok == False:
-                # Solicitar al usuario que elija el orden de los valores por orden jerárquico
-                print("Escribe los valores en el orden jerárquico deseado separados por comas:")
-                orden_valores = input().split(",")
-
-                # Eliminar espacios en blanco alrededor de los valores ingresados
-                orden_valores = [valor.strip() for valor in orden_valores]
-
-                # Verificar si todos los valores únicos están presentes en el orden jerárquico
-                if set(valores_columnas) != set(orden_valores):
-                    print("Error: Algunos valores no coinciden con el orden jerárquico.")
-                    lista_categorias_todas_cols  = []
-                else:
-                    datos_ok = True
-                    lista_categorias_todas_cols.append(orden_valores)
-
-        # Aplicar la transformación OrdinalEncoder a la lista de valores seleccionados
-        encoder = OrdinalEncoder(categories=lista_categorias_todas_cols)
-        valores_transformados = encoder.fit_transform(self.df[nombres_cols_seleccionadas])
-
-        # Crear una nueva columna por cada columna seleccionada, el nombre será el de la columna, mas el sufijo "_transformada"
-        nombres_nuevas_cols = []
-        for i in nombres_cols_seleccionadas:
-            nombres_nuevas_cols.append(i + "_transformada")
-
-        df_transformados = pd.DataFrame(valores_transformados, columns=nombres_nuevas_cols)
-
-        # Concatenar el DataFrame transformado con el DataFrame original
-        data_transformado = pd.concat([self.df, df_transformados], axis=1)
-
-        # Borrar las columnas originales
-        for col in nombres_cols_seleccionadas:
-            data_transformado = data_transformado.drop(col, axis=1)
-
-        self.df = data_transformado
-        return transformador.df
+        for columna in nombres_cols_seleccionadas:
+            self.ordinal_encoder_columna(columna)
     
 if __name__ == "__main__":
     from carga_datos import cargador
     main_file_path = os.path.abspath(__file__)
     datos = cargador(os.path.join(os.path.dirname(main_file_path), "datos", "Corredores Latinos con Categorías.csv"))
     transformador = DataFrameTransformer(datos)
-    opciones = transformador.elige_opcion()
+    opciones = transformador.transforma()
+    print(transformador.df.head(15))
