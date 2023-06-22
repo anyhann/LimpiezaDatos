@@ -1,6 +1,6 @@
 import pandas as pd
 import os
-from carga_datos import cargador
+from LimpiezaDatos.utilidades.carga_datos import cargador
 
 
 

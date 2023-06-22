@@ -2,7 +2,7 @@ from sklearn.preprocessing import OrdinalEncoder
 import os
 import pandas as pd
 import numpy as np
-from captura_opciones import leer_opciones_pantalla
+from LimpiezaDatos.utilidades.captura_opciones import leer_opciones_pantalla
 
 class DataFrameTransformer():
     def __init__(self, dataframe):
@@ -148,7 +148,7 @@ class DataFrameTransformer():
             self.ordinal_encoder_columna(columna)
     
 if __name__ == "__main__":
-    from carga_datos import cargador_datos
+    from LimpiezaDatos.utilidades.carga_datos import cargador_datos
     datos = cargador_datos("Corredores Latinos con Categorías.csv")
     transformador = DataFrameTransformer(datos)
     datos = transformador.transforma()

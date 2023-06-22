@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 import numpy as np
-from carga_datos import cargador
+from LimpiezaDatos.utilidades.carga_datos import cargador
 import pandas as pd
 
 def plot_surface(dataframe, x_column, y_column, z_column):

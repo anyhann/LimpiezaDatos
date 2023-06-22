@@ -1,5 +1,5 @@
-from carga_datos import cargador
-from captura_opciones import leer_opciones_teclado
+from LimpiezaDatos.utilidades.carga_datos import cargador
+from LimpiezaDatos.utilidades.captura_opciones import leer_opciones_teclado
 import os
 
 def pregunta_opcion():

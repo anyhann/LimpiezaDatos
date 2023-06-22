@@ -2,10 +2,10 @@ from sklearn.cluster import KMeans
 import matplotlib.pyplot as plt
 import seaborn as sns
 import pandas as pd
-from carga_datos import obtener_separador, cargador
+from LimpiezaDatos.utilidades.carga_datos import obtener_separador, cargador
 from selecciona_columnas import selecciona_columnas_numericas
 from sklearn.preprocessing import StandardScaler
-from normalizador import normalizador
+from LimpiezaDatos.transformaciones.normalizador import normalizador
 
 
 def grafica_codo():

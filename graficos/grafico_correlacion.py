@@ -1,7 +1,7 @@
 
 from statsmodels.graphics.tsaplots import plot_acf
 import matplotlib as plt
-from carga_datos import cargador
+from LimpiezaDatos.utilidades.carga_datos import cargador
 
 def grafico_auto (self, columna_valor, num_lags):
         fig, ax = plt.subplots(figsize=(7, 3))

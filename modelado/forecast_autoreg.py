@@ -24,8 +24,8 @@ def crear_entrenar_ForecasterAutoreg(datos, num_lags, fin_validacion, columna_ob
     return forecaster
 
 if __name__ == "__main__":
-    from Serie_temporal import SerieTemporal
-    from carga_datos import cargador
+    from LimpiezaDatos.Clases.Serie_temporal import SerieTemporal
+    from LimpiezaDatos.utilidades.carga_datos import cargador
     import os
 
     main_file_path = os.path.abspath(__file__)

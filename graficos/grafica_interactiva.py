@@ -1,5 +1,5 @@
-from Serie_temporal import SerieTemporal
-from carga_datos import cargador
+from LimpiezaDatos.Clases.Serie_temporal import SerieTemporal
+from LimpiezaDatos.utilidades.carga_datos import cargador
 import plotly.graph_objects as go
 
 import os

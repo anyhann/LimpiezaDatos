@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import os
 
-from carga_datos import cargador
+from LimpiezaDatos.utilidades.carga_datos import cargador
 
 def plot_correlation_heatmap(data):
     f, ax = plt.subplots(figsize=(10, 8))

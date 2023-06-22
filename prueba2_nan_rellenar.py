@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np
-from captura_opciones import leer_opciones_pantalla
+from LimpiezaDatos.utilidades.captura_opciones import leer_opciones_pantalla
 
 def completar_valores_nulos(self, columna):
     '''
