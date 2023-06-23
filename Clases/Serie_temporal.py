@@ -285,7 +285,7 @@ class SerieTemporal:
         dataframe = self.dataframe
 
         print("Seleccione el método para completar los valores nulos:")
-        metodo = leer_opciones_pantalla({"1": "Interpolación lineal", "2": "Interpolación temporal", "3": "Moda", "4": "Media"})
+        metodo = leer_opciones_pantalla({"1": "Interpolación lineal", "2": "Interpolación temporal", "3": "Moda", "4": "Media", "5": "Poner 0s"})
 
         if metodo == "1":
             dataframe[columna].interpolate(method = "linear", inplace = True, limit_direction = "both")
@@ -297,6 +297,8 @@ class SerieTemporal:
         elif metodo == "4":
             media = dataframe[columna].mean()
             dataframe[columna].fillna(media, inplace = True)
+        elif metodo == "5":
+            dataframe[columna].fillna(0, inplace = True)
         else:
             print("Método inválido. No se realizaron cambios.")
     
