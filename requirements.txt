@@ -2,7 +2,7 @@ alembic==1.11.1 ; python_version >= '3.7'
 arch==6.1.0
 attrs==23.1.0 ; python_version >= '3.7'
 certifi==2023.5.7 ; python_version >= '3.6'
-charset-normalizer==2.0.0 ; python_full_version >= '3.7.0'
+charset-normalizer==3.1.0 ; python_full_version >= '3.7.0'
 cmaes==0.9.1 ; python_version >= '3.7'
 colorlog==6.7.0 ; python_version >= '3.6'
 contourpy==1.1.0 ; python_version >= '3.8'
