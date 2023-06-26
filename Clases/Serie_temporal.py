@@ -25,10 +25,10 @@ class SerieTemporal:
         self.columna_valores = columna_valores
         if isinstance(dataframe.index, pd.DatetimeIndex):
             self.dataframe = dataframe
-            self.ajustar_periodicidad()
+            #self.ajustar_periodicidad()
         else:
             self.dataframe = self.__conversion_a_serie_temp(dataframe, columna_temporal)
-            self.ajustar_periodicidad()
+            #self.ajustar_periodicidad()
         
     def __conversion_a_serie_temp(self, dataframe, col_temporal):
         """
@@ -37,11 +37,10 @@ class SerieTemporal:
         dataframe.loc[:, col_temporal] = auto_conversion_datetime(dataframe[col_temporal])
         dataframe = dataframe.sort_values(col_temporal)
         dataframe.set_index(col_temporal, inplace=True)
-        #print(f"Valor 1: {dataframe.index[1]}, Valor 0: {dataframe.index[0]}")
         df_time_diffs = dataframe.index.to_series().diff().dt.total_seconds()
         frecuencia_moda = df_time_diffs.value_counts().index[0]
-        dataframe = dataframe.asfreq(freq=(str(int(frecuencia_moda)))+ "S")
         print("La frecuencia de la serie temporal es:", dataframe.index.freq)
+        dataframe = dataframe.asfreq(freq=(str(int(frecuencia_moda)))+ "S")
         dataframe = dataframe.sort_index()
         print(f'Número de filas con missing values: {dataframe.isnull().any(axis=1).sum()}')
         return dataframe
